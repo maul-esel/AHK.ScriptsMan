@@ -1,0 +1,160 @@
+<Translation language="English" Translator="maul.esel">
+	
+	<UserInterface>
+	
+		<TrayMenu>
+			<Item>show / hide</Item>
+			<Item>help</Item>
+			<Item>restart</Item>
+			<Item>exit</Item>
+		</TrayMenu>
+	
+		<MainGui>
+
+			<Treeview>
+				<ToolButton>settings</ToolButton>
+				<ToolButton>about...</ToolButton>			
+			</Treeview>
+			
+			<QuickEdit>
+				<ToolButton>open file</ToolButton>
+				<ToolButton>create file</ToolButton>
+				<ToolButton>close file</ToolButton>
+			</QuickEdit>
+		
+			<Tasks>
+				<Header>task</Header>
+				<Header>project</Header>
+				<MenuItem>mark as done</MenuItem>
+				<MenuItem>move up</MenuItem>
+				<MenuItem>move down</MenuItem>
+				<ToolButton>new task</ToolButton>
+				<ToolButton>project tasks</ToolButton>
+				<Info>(no project)</Info>
+			</Tasks>
+			
+			<Resources>
+				<Header>resource</Header>
+				<Header>resource type</Header>
+				<Header>resource ID</Header>
+				<Overview>
+					<ToolButton>copy resource ID</ToolButton>
+				</Overview>
+				<UserData>
+					<Header>metadata</Header>
+					<Header>value</Header>
+				</UserData>
+				<Projects>
+					<Header>project</Header>
+				</Projects>
+				<FilesLibs>
+					<ToolButton></ToolButton>
+					<Property>name</Property>
+					<Property>type</Property>
+					<Property>description</Property>
+					<Property>path</Property>
+					<Property></Property>
+				</FilesLibs>
+				<ToolButton>edit resource</ToolButton>
+			</Resources>
+			
+			<Projects>
+				<Files>
+					<Header>file</Header>
+					<Header>#include</Header>
+					<Header>type</Header>
+					<Header>description</Header>
+					<Header>file size</Header>
+					<Header>path</Header>
+					<MenuItem>switch ot this resource</MenuItem>
+					<MenuItem>show metadata</MenuItem>
+					<MenuItem>edit file</MenuItem>
+					<MenuItem>run file</MenuItem>
+					<MenuItem>open file as...</MenuItem>
+					<MenuItem>remove file from project</MenuItem>
+				</Files>
+				<Libraries>
+					<Header>library</Header>
+					<Header>author</Header>
+					<Header>license</Header>
+					<Header>version</Header>
+					<MenuItem>switch to this resource</MenuItem>
+					<MenuItem>show metadata</MenuItem>
+					<MenuItem>edit resource</MenuItem>
+					<MenuItem>remove resource from project</MenuItem>
+				</Libraries>
+				<UserData>
+					<Header>metadata</Header>
+					<Header>value</Header>
+					<MenuItem>edit metadata</MenuItem>
+					<MenuItem>delete metadata</MenuItem>
+				</UserData>
+				<Tasks>
+					<ToolButton></ToolButton>
+				</Tasks>
+				<properties>
+					<property>status</property>
+					<property>compatible with</property>
+					<property>type</property>
+					<property>purpose</property>
+					<property>last modified</property>
+				</properties>
+				<MenuItem>open project</MenuItem>
+				<MenuItem>package project</MenuItem>
+				<MenuItem>remove project</MenuItem>
+				<ToolButton>add file</ToolButton>
+			</Projects>
+	
+		</MainGui>
+		
+		<Dialogs>
+			<AddLib>Enter the Name of the new library.</AddLib>
+			<AddLib>Do you want to add the path to this library?</AddLib>
+			<AddLib>Enter the path.</AddLib>
+			<AddFile>Enter the file name.</AddFile>
+			<AddFile>Do you want to add the path to this file?</AddFile>
+			<AddFile>Enter the path.</AddFile>
+			<CreateProject>Enter the project's name.</CreateProject>
+			<CreateProject>An error occured:
+							duplicate resource name. You can't create 2 resources with the same name.</CreateProject>
+			<CreateProject>If you want to add the new project to another project,
+							enter the parent's resource number.
+							Otherwise click Abort.</CreateProject>
+			<CreateProject>An error occured:
+							Invalid resource ID. The ID must be a pure number that identifies an existing project.</CreateProject>
+			<SetPriority>Enter the project's priority.</SetPriority>
+			<SetPriority>This priority is invalid!</SetPriority>
+			<CreateUserData>Enter the metadata's name.</CreateUserData>
+			<CreateUserData>Enter the metadata's value.</CreateUserData>
+			<CreateUserData>Do you want to disallow reading this data as keyword data?</CreateUserData>
+			<CreateUserData>Do you want to set this metadata as default data?</CreateUserData>
+			<CreateTask>Enter the new task's name.</CreateTask>
+			<Browse7zip>Enter the path to 7zip.exe.
+						You don't have 7zip? get it for free at www.7-zip.org.</Browse7zip>
+			<BrowseAHK_B_EXE>Enter the path to your AutoHotkey.exe (AHK basic!)</BrowseAHK_B_EXE>
+			<BrowseAHK_L_EXE>Enter the path to your AutoHotkey(_L).exe.</BrowseAHK_L_EXE>
+			<BrowseAHK_I_EXE>Enter the path to your IronAHK.exe.</BrowseAHK_I_EXE>
+			<BrowseScriptDir>Select the directory that contains your scripts.</BrowseScriptDir>
+			<EditResource>Enter the resource ID.</EditResource>
+		</Dialogs>
+		
+	</UserInterface>
+	
+	<DefaultOptions>
+		<Status>idea|finished|stopped development|under development|queued</Status>
+		<Type>program|script|library</Type>
+	</DefaultOptions>
+	
+	<KeyWords>
+		<Name>name</Name>
+		<Hide>hide</Hide>
+		<Include>include</Include>
+		<FileType>type</FileType>
+		<Description>description</Description>
+		<Path>path</Path>
+		<Author>author</Author>
+		<License>license</License>
+		<Version>version</Version>
+	</KeyWords>
+	
+</Translation>

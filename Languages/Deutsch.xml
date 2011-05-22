@@ -1,0 +1,159 @@
+﻿<Translation language="Deutsch" Translator="maul.esel">
+	
+	<UserInterface>
+	
+		<TrayMenu>
+			<Item>Anzeigen / Verstecken</Item>
+			<Item>Hilfe</Item>
+			<Item>Neustart</Item>
+			<Item>Beenden</Item>
+		</TrayMenu>
+		
+		<MainGui>
+		
+			<Treeview>
+				<ToolButton>Einstellungen</ToolButton>
+				<ToolButton>Über...</ToolButton>			
+			</Treeview>
+			
+			<QuickEdit>
+				<ToolButton>Öffnen</ToolButton>
+				<ToolButton>erstellen</ToolButton>
+				<ToolButton>schließen</ToolButton>
+			</QuickEdit>
+		
+			<Tasks>
+				<Header>Aufgabe</Header>
+				<Header>Projekt</Header>
+				<MenuItem>erledigt</MenuItem>
+				<MenuItem>nach oben</MenuItem>
+				<MenuItem>nach unten</MenuItem>
+				<ToolButton>neue Aufgabe</ToolButton>
+				<ToolButton>projektspezifische Aufgaben</ToolButton>
+				<Info>(kein Projekt)</Info>
+			</Tasks>
+			
+			<Resources>
+				<Header>Ressource</Header>
+				<Header>Ressource-Typ</Header>
+				<Header>Ressource-Nummer</Header>
+				<Overview>
+					<ToolButton>Ressource-Nummer kopieren</ToolButton>
+				</Overview>
+				<UserData>
+					<Header>Zusatzinfo</Header>
+					<Header>Wert</Header>
+				</UserData>
+				<Projects>
+					<Header>Projekt</Header>
+				</Projects>
+				<FilesLibs>
+					<ToolButton></ToolButton>
+					<Property>Name</Property>
+					<Property>Typ</Property>
+					<Property>Beschreibung</Property>
+					<Property>Pfad</Property>
+					<Property></Property>
+				</FilesLibs>
+				<ToolButton>Ressource bearbeiten</ToolButton>
+			</Resources>
+			
+			<Projects>
+				<Files>
+					<Header>Datei</Header>
+					<Header>#Include</Header>
+					<Header>Typ</Header>
+					<Header>Beschreibung</Header>
+					<Header>Dateigröße</Header>
+					<Header>Pfad</Header>
+					<MenuItem>Zu dieser Ressource wechseln</MenuItem>
+					<MenuItem>Zusatzinfo anzeigen</MenuItem>
+					<MenuItem>Datei bearbeiten</MenuItem>
+					<MenuItem>Datei ausführen</MenuItem>
+					<MenuItem>Datei öffnen mit...</MenuItem>
+					<MenuItem>Datei aus Projekt entfernen</MenuItem>
+				</Files>
+				<Libraries>
+					<Header>Library</Header>
+					<Header>Autor</Header>
+					<Header>Lizenz</Header>
+					<Header>Version</Header>
+					<MenuItem>Zu dieser Ressource wechseln</MenuItem>
+					<MenuItem>Zusatzinfo anzeigen</MenuItem>
+					<MenuItem>Ressource bearbeiten</MenuItem>
+					<MenuItem>Ressource aus Projekt entfernen</MenuItem>
+				</Libraries>
+				<UserData>
+					<Header>Zusatzinfo</Header>
+					<Header>Wert</Header>
+					<MenuItem>Zusatzinfo bearbeiten</MenuItem>
+					<MenuItem>Zusatzinfo löschen</MenuItem>
+				</UserData>
+				<Tasks>
+					<ToolButton></ToolButton>
+				</Tasks>
+				<properties>
+					<property>Status</property>
+					<property>kompatibel mit</property>
+					<property>Typ</property>
+					<property>Zweck</property>
+					<property>zuletzt bearbeitet</property>
+				</properties>
+				<MenuItem>Projekt öffnen</MenuItem>
+				<MenuItem>Projekt packen</MenuItem>
+				<MenuItem>Projekt entfernen</MenuItem>
+				<ToolButton>Daten hinzufügen</ToolButton>
+			</Projects>
+	
+		</MainGui>
+		
+		<Dialogs>
+			<AddLib>Geben Sie den Namen der neuen Library ein.</AddLib>
+			<AddLib>Wollen Sie den Pfad zu dieser Library hinzufügen?</AddLib>
+			<AddLib>Geben Sie den Dateipfad an.</AddLib>
+			<AddFile>Geben Sie den Namen der Datei ein.</AddFile>
+			<AddFile>Wollen Sie den Pfad dieser Datei hinzufügen?</AddFile>
+			<AddFile>Geben Sie den Pfad zur Datei an.</AddFile>
+			<CreateProject>Geben Sie den Namen für Ihr Projekt ein.</CreateProject>
+			<CreateProject>Ein Fehler ist aufgetreten:
+							Doppelter Resourcen-Name. Sie können nicht 2 Resourcen mit demselben Namen erstellen.</CreateProject>
+			<CreateProject>Wenn Sie das neue Projekt als Teilprojekt an ein anderes Projekt binden wollen,
+							geben Sie nun dessen Resource-Nummer ein.
+							Wenn Sie das nicht wollen, klicken sie Abbrechen.</CreateProject>
+			<CreateProject>Ein Fehler ist aufgetreten:
+							Ungültige Resourcen-ID. Die ID muss aus Ziffern bestehen und ein bestehendes Projekt identifizieren.</CreateProject>
+			<SetPriority>Geben Sie die Priorität für das Projekt ein.</SetPriority>
+			<SetPriority>Diese Prioriät ist ungültig!</SetPriority>
+			<CreateUserData>Geben Sie den Namen für die benutzerdefinierten Daten ein.</CreateUserData>
+			<CreateUserData>Geben Sie den neuen Wert für die benutzerdefinierten Daten ein.</CreateUserData>
+			<CreateUserData>Wollen Sie verhindern, dass diese Daten als Standard-Eigenschaften erkannt werden?</CreateUserData>
+			<CreateUserData>Wollen Sie diese Daten als Standard-Daten festlegen?</CreateUserData>
+			<CreateTask>Geben Sie den Name für die neue Aufgabe ein.</CreateTask>
+			<Browse7zip>Geben Sie den Pfad zu 7zip.exe an. Wenn Sie keine solche besitzen, können Sie sie kostenlos erhalten unter http://www.7-zip.org/.</Browse7zip>
+			<BrowseAHK_B_EXE>Geben Sie den Pfad zu AutoHotkey.exe an (AHK Basic!)</BrowseAHK_B_EXE>
+			<BrowseAHK_L_EXE>Geben Sie den Pfad zu AutoHotkey(_L).exe an.</BrowseAHK_L_EXE>
+			<BrowseAHK_I_EXE>Geben Sie den Pfad zu IronAHK.exe an.</BrowseAHK_I_EXE>
+			<BrowseScriptDir>Geben Sie den Ordner an, der Ihre Skripts enthält.</BrowseScriptDir>
+			<EditResource>Geben sie die ID der Ressource ein</EditResource>
+		</Dialogs>
+		
+	</UserInterface>
+	
+	<DefaultOptions>
+		<Status>Idee|fertig|Entwicklung gestoppt|wird entwickelt|verschoben</Status>
+		<Type>Programm|Skript|Funktions-Library</Type>
+	</DefaultOptions>
+	
+	<KeyWords>
+		<Name>Name</Name>
+		<Hide>Versteckt</Hide>
+		<Include>Include</Include>
+		<FileType>Typ</FileType>
+		<Description>Beschreibung</Description>
+		<Path>Pfad</Path>
+		<Author>Autor</Author>
+		<License>Lizenz</License>
+		<Version>Version</Version>
+	</KeyWords>
+	
+</Translation>
