@@ -1,6 +1,6 @@
 ﻿<Settings>
 	<paths>
-		<ScriptDir>C:\Users\Dominik\AutoHotkey</ScriptDir>
+		<ScriptDir></ScriptDir>
 		<_7zip></_7zip>
 		<AHK>
 			<Basic></Basic>
@@ -13,8 +13,8 @@
 	<updates enable="0"></updates>
 	
 	<source_languages>
-		<language Name="AutoHotkey">C:\Users\Dominik\AutoHotkey\Global Resources\Keywords_2.hes</language>
-		<language Name="AutoHotkey_L">C:\Users\Dominik\AutoHotkey\Global Resources\Keywords_2.hes</language>
+		<language Name="AutoHotkey"></language>
+		<language Name="AutoHotkey_L"></language>
 		<language Name="IronAHK"></language>
 	</source_languages>
 	
