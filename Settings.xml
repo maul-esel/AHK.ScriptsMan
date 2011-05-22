@@ -1,26 +1,26 @@
-﻿<Settings>
+﻿<settings>
 	<paths>
-		<ScriptDir>C:\AutoHotkey</ScriptDir>
+		<script-dir>C:\AutoHotkey</script-dir>
 		<_7zip>C:\Program Files\7-Zip\7z.exe</_7zip>
-		<AHK>
-			<Basic>C:\Program Files\AutoHotkey\AutoHotkey.exe</Basic>
-			<Lexikos>C:\Program Files\AutoHotkey_L\AutoHotkey_L.exe</Lexikos>
-			<IronAHK>C:\Program Files\IronAHK\IronAHK.exe</IronAHK>
-			<AHK_2>C:\Program Files\AutoHotkey2\AutoHotkey.exe</AHK_2>
-		</AHK>
+		<ahk>
+			<basic>C:\Program Files\AutoHotkey\AutoHotkey.exe</basic>
+			<lexikos>C:\Program Files\AutoHotkey_L\AutoHotkey_L.exe</lexikos>
+			<iron-ahk>C:\Program Files\IronAHK\IronAHK.exe</iron-ahk>
+			<ahk-2>C:\Program Files\AutoHotkey2\AutoHotkey.exe</ahk-2>
+		</ahk>
 	</paths>
 	<language>English</language>
 	<updates enable="0"></updates>
 	
 	<source_languages>
-		<language Name="AutoHotkey">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_B.hes</language>
-		<language Name="AutoHotkey_L">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_L.hes</language>
-		<language Name="IronAHK">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_I.hes</language>
-		<language Name="AutoHotkey2">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_2.hes</language>
+		<language name="AutoHotkey">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_B.hes</language>
+		<language name="AutoHotkey_L">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_L.hes</language>
+		<language name="IronAHK">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_I.hes</language>
+		<language name="AutoHotkey2">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_2.hes</language>
 	</source_languages>
 	
 	<tasks>
-		<task Name="finish scintilla">Continue work on scintilla
+		<task name="finish scintilla">Continue work on scintilla
 				wrapper : it is necessary for this project!</task>
 	</tasks>
-</Settings>
+</settings>

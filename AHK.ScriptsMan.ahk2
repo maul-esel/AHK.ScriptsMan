@@ -27,7 +27,7 @@ Menu Tray, Icon, %A_ScriptDir%\AHK.ScriptsMan.dll, 1, 1
 hSCIModule := SCI_Init(A_ScriptDir "\#Extern\Scintilla.dll")
 ; ***********************************************************************************************************************************************************************
 Data_Manager := {}
-Data_Manager.ScriptDir := XML_Get("/paths/ScriptDir")
+Data_Manager.ScriptDir := XML_Get("/paths/script-dir")
 
 If (SubStr(Data_Manager.ScriptDir, 0) != "\") {
 	_Temp := Data_Manager.ScriptDir
@@ -39,7 +39,7 @@ If (SubStr(Data_Manager.ScriptDir, 0) != "\") {
 ; ***********************************************************************************************************************************************************************
 LoopFiles %A_ScriptDir%\Languages\*.xml
 	{
-	if (XML_Get("/Translation/@language", 1, A_LoopFileFullPath) = XML_Get("/language", 1)) {
+	if (XML_Get("/Translation/@language", 1, A_LoopFileFullPath) && XML_Get("/Translation/@language", 1, A_LoopFileFullPath) = XML_Get("/language", 1)) {
 		Data_Manager.LanguageXML	:=	A_LoopFileFullPath
 		break
 		}
@@ -52,16 +52,16 @@ if (! Data_Manager.HasKey("LanguageXML")) {
 	
 Keyword	:=	{}
 	Keyword.file	:=  {}
-		Keyword.file.Hide			:=	XML_Translation("/KeyWords/Hide")			?	XML_Translation("/KeyWords/Hide")			:	"Hide"
-		Keyword.file.Include		:=	XML_Translation("/KeyWords/Include")		?	XML_Translation("/KeyWords/Hide")			:	"Include"
-		Keyword.file.FileType		:=	XML_Translation("/KeyWords/FileType")		?	XML_Translation("/KeyWords/FileType")		:	"Type"
-		Keyword.file.Description	:=	XML_Translation("/KeyWords/Description")	?	XML_Translation("/KeyWords/Description")	:	"Description"
-		Keyword.file.Path			:=	XML_Translation("/KeyWords/Path")			?	XML_Translation("/KeyWords/Path")			:	"Path"
+		Keyword.file.Hide			:=	XML_Translation("/KeyWords/Hide")			?	XML_Translation("/KeyWords/Hide")			:	"hide"
+		Keyword.file.Include		:=	XML_Translation("/KeyWords/Include")		?	XML_Translation("/KeyWords/Include")		:	"include"
+		Keyword.file.FileType		:=	XML_Translation("/KeyWords/FileType")		?	XML_Translation("/KeyWords/FileType")		:	"type"
+		Keyword.file.Description	:=	XML_Translation("/KeyWords/Description")	?	XML_Translation("/KeyWords/Description")	:	"description"
+		Keyword.file.Path			:=	XML_Translation("/KeyWords/Path")			?	XML_Translation("/KeyWords/Path")			:	"path"
 	Keyword.lib		:=	{}
-		Keyword.lib.Hide			:=	XML_Translation("/KeyWords/Hide")			?	XML_Translation("/KeyWords/Hide")			:	"Hide"
-		Keyword.lib.Author			:=	XML_Translation("/KeyWords/Author")			?	XML_Translation("/KeyWords/Author")			:	"Author"
-		Keyword.lib.License			:=	XML_Translation("/KeyWords/License")		?	XML_Translation("/KeyWords/License")		:	"License"
-		Keyword.lib.Version			:=	XML_Translation("/KeyWords/Version")		?	XML_Translation("/KeyWords/Version")		:	"Version"
+		Keyword.lib.Hide			:=	XML_Translation("/KeyWords/Hide")			?	XML_Translation("/KeyWords/Hide")			:	"hide"
+		Keyword.lib.Author			:=	XML_Translation("/KeyWords/Author")			?	XML_Translation("/KeyWords/Author")			:	"author"
+		Keyword.lib.License			:=	XML_Translation("/KeyWords/License")		?	XML_Translation("/KeyWords/License")		:	"license"
+		Keyword.lib.Version			:=	XML_Translation("/KeyWords/Version")		?	XML_Translation("/KeyWords/Version")		:	"version"
 
 Documents	:=	{}
 Resources	:=	{}
@@ -262,7 +262,7 @@ return
 }
 ; **********************************************************************************************************************************************************************
 Project_AddUserData() {
-_Project := SVS_GetFilePath(Resources.ActiveID)
+_doc := Resources[Resources.ActiveID].XML
 
 InputBox _Name, AHK.ScriptsMan, % XML_Translation("/UserInterface/Dialogs/CreateUserData", 1)
 if (ErrorLevel || !_Name)
@@ -483,21 +483,6 @@ if (sID = 211) {
 	UI_Event_Handler(0, "click", "", 0, 312)
 } else if (sID = 112) {
 	return -1
-} else if (sID = 113) {
-	Gui 1: Default
-	Gui 1: Listview, Projects_LV
-	_Row := LV_GetNext()
-	LV_GetText(_Project, _Row)
-	_Path := SVS_GetFilePath(_Project)
-	FileDelete % _Path
-	LV_Delete(_Row)
-	Gui 1: Treeview, TreeProjects
-	;_ID := TV_GetID(_Project)
-	if _ID
-		TV_Delete(_ID)
-	TV_Delete(_ID)
-	LV_GetText(_Project, _Row)
-	Project_Open(_Project)
 } else if (sID = 121) {
 	Gui 1: Default
 	Gui 1: Listview, Projects_LV

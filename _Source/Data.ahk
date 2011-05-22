@@ -15,8 +15,8 @@ Gui 1: Listview, Resource_LV
 
 ; create tasks tvitem && add public tasks to the list
 Gui 1: Listview, CommonTasks_LV
-Resources[ TV_Add("Tasks", 0, "Icon1") ] := {"Type" : "task_parent"}
-tasks := (new XMLParser(A_ScriptDir "\Settings.xml")).GetNodes("/Settings/tasks/task")
+Resources[ TV_Add("tasks", 0, "Icon1") ] := {"type" : "task_parent"}
+tasks := (new XMLParser(A_ScriptDir "\Settings.xml")).GetNodes("/settings/tasks/task")
 Loop tasks.length {
 	_Temp := tasks.item(A_Index - 1).text
 	if not (_Temp)
@@ -25,41 +25,38 @@ Loop tasks.length {
 	}
 
 ; add resources tvitem
-_ID := TV_Add("Resources", 0, "Icon2 Expand") ; icon: resource_parent
-Resources[_ID]	:= {"Type"		:	"resource_parent"
-								, "Files"		:	{}
-								, "Libraries"	:	{}}
+_ID := TV_Add("resources", 0, "icon2 expand") ; icon: resource_parent
+Resources[_ID]	:= {"type"		:	"resource_parent"
+								, "files"		:	{}
+								, "libraries"	:	{}}
 
 ; loop all resources
 Resources.List := {}
 LoopFiles %A_ScriptDir%\#Data\*.xml
 	{
 	doc := new XMLParser(A_LoopFileFullPath)
-	_ResType := doc.Get("/Resource/@DataType")
-	;MsgBox, 4096, %A_ThisFunc%, % A_LoopFileFullPath "`n" A_Index "`n#" _ResType "#"
-
+	_ResType := doc.Get("/resource/@data-type")
 	
 	if (_ResType = "project"){
 	
-		lid := List_Project(doc, "/Resource", 0, A_LoopFileFullPath)
+		lid := List_Project(doc, "/resource", 0, A_LoopFileFullPath)
 		
 	} else if (_ResType = "file"){
 
 		Gui 1: Listview, Resource_LV
 				
-		_Name := doc.Get("/Resource/@Name")
-		_RID := TV_Add(_Name, _ID, "Icon4") ; icon: resource-file
+		_Name := doc.Get("/resource/@name")
+		_RID := TV_Add(_Name, _ID, "icon4") ; icon: resource-file
 	
-		Resources[_RID]	:=	{"Name"		:	_Name
-								, "Type"		:	"file"
+		Resources[_RID]	:=	{"name"		:	_Name
+								, "type"		:	"file"
 								, "context"		:	"resource"
-								, "ParentID"	:	0
+								, "parentID"	:	0
 								, "XML"			:	doc
-								, "Tree"		:	"/Resource"
-								, "File"		:	A_LoopFileFullPath}
+								, "tree"		:	"/resource"
+								, "file"		:	A_LoopFileFullPath}
 	
-		Resources[_ID].Files.Count++
-		Resources[_ID].Files["File" A_Index ] := _RID
+		Resources[_ID].Files["file" A_Index ] := _RID
 		LV_Add("", _Name, "file", _RID)
 		Resources.List[_Name] := _RID
 		
@@ -67,19 +64,18 @@ LoopFiles %A_ScriptDir%\#Data\*.xml
 	
 		Gui 1: Listview, Resource_LV
 
-		_Name := doc.Get("/Resource/@Name")
-		_RID := TV_Add(_Name, _ID, "Icon5") ; icon: resource-lib
+		_Name := doc.Get("/resource/@name")
+		_RID := TV_Add(_Name, _ID, "icon5") ; icon: resource-lib
 	
-		Resources[_RID]	:=	{"Name"		:	_Name
-								, "Type"		:	"library"
+		Resources[_RID]	:=	{"name"		:	_Name
+								, "type"		:	"library"
 								, "context"		:	"resource"
-								, "ParentID"	:	0
+								, "parentID"	:	0
 								, "XML"			:	doc
-								, "Tree"		:	"/Resource"
-								, "File"		:	A_LoopFileFullPath}
+								, "tree"		:	"/resource"
+								, "file"		:	A_LoopFileFullPath}
 	
-		Resources[_ID].Libraries.Count++
-		Resources[_ID].Libraries["Library" A_Index ] := _RID
+		Resources[_ID].Libraries["library" A_Index ] := _RID
 		LV_Add("", _Name, "library", _RID)
 		Resources.List[_Name] := _RID
 		
@@ -115,9 +111,9 @@ List_Project(sDoc, sTree, sPID, sFile) {
 Gui 1: Treeview, ResourceTree
 Gui 1: ListView, Resource_LV
 
-_Priority	:=	sDoc.Get(sTree . "/Properties/Priority")
-_Name		:=	sDoc.Get(sTree . "/@Name")
-_ID			:=	TV_Add(_Name, sPID, "Icon3 Expand") ; icon: project
+_Priority	:=	sDoc.Get(sTree . "/properties/priority")
+_Name		:=	sDoc.Get(sTree . "/@name")
+_ID			:=	TV_Add(_Name, sPID, "icon3 expand") ; icon: project
 TV_SetStateImage(Gui.Treeview.Handle, _ID, _Priority = 3 ? 3 : (_Priority = 2 ? 2 : 1))
 Resources.List[_Name] := _ID
 
@@ -125,28 +121,28 @@ Resources[_ID]	:=	{"Name"				:	_Name
 					, "Type"			:	"project"
 					, "context"			:	sPID ? "project" : "toplevel"
 					, "ParentID"		:	sPID
-					, "ParentTree"		:	Resources[sPID].ParentTree (sPID != 0 ? " >> " : "") _Name
+					, "ParentTree"		:	Resources[sPID].ParentTree "/" _Name
 					, "XML"				:	sDoc
 					, "Priority"		:	_Priority
 					, "Tree"			:	sTree
-					, "compatibility"	:	{"Basic"	:	sDoc.Get(sTree . "/Properties/compatibility/Basic")
-											, "Lexikos"	:	sDoc.Get(sTree . "/Properties/compatibility/Lexikos")
-											, "IronAHK"	:	sDoc.Get(sTree . "/Properties/compatibility/IronAHK")
-											, "AHK2"	:	sDoc.Get(sTree . "/Properties/compatibility/AHK2")}
+					, "compatibility"	:	{"Basic"	:	sDoc.Get(sTree . "/properties/compatibility/basic")
+											, "Lexikos"	:	sDoc.Get(sTree . "/properties/compatibility/lexikos")
+											, "IronAHK"	:	sDoc.Get(sTree . "/properties/compatibility/iron-ahk")
+											, "AHK2"	:	sDoc.Get(sTree . "/properties/compatibility/ahk-2")}
 					, "File"			:	sFile}
 LV_Add("", _Name, "project", _ID)
 
 Gui 1: Listview, CommonTasks_LV
 Resources[_ID].Tasks		:=	{}
-Loop sDoc.GetNodes(sTree . "/Tasks/Task").length {
-	LV_Add("", sDoc.Get(sTree . "/Tasks/Task[" A_Index-1 "]/@Name"), Resources[_ID].ParentTree)
-	Resources[_ID].Tasks["Task" A_Index] := {"Name" : _Temp
-											, "Description" : sDoc.Get(sTree . "/Tasks/Task[" A_Index-1 "]")}
+Loop sDoc.GetNodes(sTree . "/tasks/task").length {
+	LV_Add("", sDoc.Get(sTree . "/tasks/task[" A_Index-1 "]/@name"), Resources[_ID].ParentTree)
+	Resources[_ID].Tasks["task" A_Index] := {"Name" : _Temp
+											, "Description" : sDoc.Get(sTree . "/tasks/task[" A_Index-1 "]")}
 	}
 
 Resources[_ID].Files		:=	{}
 Loop {
-	_Temp := sDoc.Get(sTree . "/Files/File[" A_Index-1 "]/@Name")
+	_Temp := sDoc.Get(sTree . "/files/file[" A_Index-1 "]/@name")
 	if (!_Temp)
 		break
 		
@@ -156,14 +152,14 @@ Loop {
 							, "context"		:	"project"
 							, "ParentID"	:	_ID
 							, "XML"			:	sDoc
-							, "Tree"		:	sTree "/Files/File[" A_Index-1 "]"
+							, "Tree"		:	sTree "/files/file[" A_Index-1 "]"
 							, "File"		:	sFile}
-	Resources[_ID].Files["File" A_Index ] := _RID
+	Resources[_ID].Files["file" A_Index ] := _RID
 	}
 
 Resources[_ID].Libraries	:=	{}
 Loop {
-	_Temp := sDoc.Get(sTree . "/Libraries/Lib[" A_Index-1 "]/@Name")
+	_Temp := sDoc.Get(sTree . "/libraries/lib[" A_Index-1 "]/@name")
 	if (!_Temp)
 		break
 		
@@ -173,14 +169,14 @@ Loop {
 							, "context"		:	"project"
 							, "ParentID"	:	_ID
 							, "XML"			:	sDoc
-							, "Tree"		:	sTree "/Libraries/Lib[" A_Index-1 "]"
+							, "Tree"		:	sTree "/libraries/lib[" A_Index-1 "]"
 							, "File"		:	sFile}
-	Resources[_ID].Libraries["Library" A_Index ] := _RID
+	Resources[_ID].Libraries["library" A_Index ] := _RID
 	}
 
 Resources[_ID].Subs		:=	{}
-Loop (sDoc.GetNodes(sTree "/Sub").length)
-	Resources[_ID].Subs["Sub" A_Index ] := List_Project(sDoc, sTree . "/Sub[" A_Index-1 "]",  _ID, sFile)
+Loop (sDoc.GetNodes(sTree "/sub").length)
+	Resources[_ID].Subs["sub" A_Index ] := List_Project(sDoc, sTree . "/sub[" A_Index-1 "]",  _ID, sFile)
 
 
 return _ID
@@ -207,7 +203,7 @@ Gui 1: Listview, ResourceUserData_LV
 	LV_Delete()
 	GuiControl 1: -Redraw, ResourceUserData_LV
 
-nodes := _Doc.Node(Resources[sID].Tree . "/User_Data")
+nodes := _Doc.Node(Resources[sID].Tree . "/metadata")
 Loop nodes.childNodes.length
 	{
 	_Value := nodes.childNodes.item(A_Index - 1).text
@@ -270,9 +266,9 @@ Gui 1: Listview, ProjectFiles_LV
 _Doc := Resources[sID].XML
 
 For file, _ID in Resources[sID].Files {
-	
+
 	if (! Resources[_ID].ResourceXML)
-		Resources[_ID].ResourceXML := SVS_GetResourceXML(_ID)
+		Resources[_ID].ResourceXML := GetResourceXML(_ID)
 	
 	if (Resources[_ID].ResourceXML)
 		rDoc := new XMLParser(Resources[_ID].ResourceXML)
@@ -280,16 +276,18 @@ For file, _ID in Resources[sID].Files {
 	for property, _keyword in Keyword.file
 		{
 		if (! Resources[_ID].HasKey(property) && Resources[_ID].ResourceXML){
-			_Value	:=	rDoc.Get("/Resource/User_Data/" . _keyword)
-			_Flag	:=	rDoc.Get("/Resource/User_Data/" . _keyword . "/@Flag")
-			_Count	:=	rDoc.Count("/Resource/User_Data/" . _keyword)
+			_Value	:=	rDoc.Node("/resource/metadata/metadata[@name='" . _keyword . "']").text
+			_Flag	:=	rDoc.Node("/resource/metadata/metadata[@name='" . _keyword . "']").attributes.getNamedItem("flag").nodeValue
+			_Count	:=	rDoc.Count("/resource/metadata/metadata[@name='" . _keyword . "']")
+			
 			if (!InStr(_Flag, "#") && (!InStr(_Flag, "-") || property = "hide") && _Count)
 				Resources[_ID][property]	:=	_Value
 			}
 		
-		_Value		:=	_Doc.Get(Resources[_ID].Tree . "/User_Data/" . _keyword)
-		, _Flag		:=	_Doc.Get(Resources[_ID].Tree . "/User_Data/" . _keyword . "/@Flag")
-		, _Count	:=	_Doc.Count(Resources[_ID].Tree . "/User_Data/" . _keyword)
+		_Value		:=	_Doc.Get(Resources[_ID].Tree . "/metadata/" . _keyword)
+		_Flag		:=	_Doc.Get(Resources[_ID].Tree . "/metadata/" . _keyword . "/@Flag")
+		_Count	:=	_Doc.Count(Resources[_ID].Tree . "/metadata/" . _keyword)
+		
 		if (!InStr(_Flag, "#") && (!InStr(_Flag, "-") || property = "hide") && _Count)
 			Resources[_ID][property]	:=	_Value
 		}
@@ -297,8 +295,7 @@ For file, _ID in Resources[sID].Files {
 	if Resources[_ID].Hide
 		continue
 	
-	if (Resources[_ID].Path && !FileExist(Resources[_ID].Path) && FileExist(Data_Manager.ScriptDir . Resources[_ID].Path))
-		Resources[_ID].Path := Data_Manager.ScriptDir . Resources[_ID].Path
+	Resources[_ID].Path := AbsolutePath(Resources[_ID].Path)
 	
 	if (Resources[_ID].Path && FileExist(Resources[_ID].Path)) {
 		FileGetSize _Temp, % Resources[_ID].Path, K
@@ -326,7 +323,7 @@ Gui 1: ListView, ProjectLibraries_LV
 For lib, _ID in Resources[sID].Libraries {
 	
 	if (! Resources[_ID].ResourceXML)
-		Resources[_ID].ResourceXML := SVS_GetResourceXML(_ID)		
+		Resources[_ID].ResourceXML := GetResourceXML(_ID)		
 	
 	if (Resources[_ID].ResourceXML)
 		rDoc := new XMLParser(Resources[_ID].ResourceXML)
@@ -334,16 +331,17 @@ For lib, _ID in Resources[sID].Libraries {
 	For property, _keyword in Keyword.lib
 		{
 		if (! Resources[_ID].HasKey(property) && Resources[_ID].ResourceXML){
-			_Value	:=	rDoc.Get("/Resource/User_Data/" . _keyword)
-			_Flag	:=	rDoc.Get("/Resource/User_Data/" . _keyword . "/@Flag")
-			_Count	:=	rDoc.Count("/Resource/User_Data/" . _keyword)
+			_Value	:=	rDoc.Node("/resource/metadata/metadata[@name='" . _keyword . "']").text
+			_Flag	:=	rDoc.Node("/resource/metadata/metadata[@name='" . _keyword . "']").attributes.getNamedItem("flag").nodeValue
+			_Count	:=	rDoc.HasNode("/resource/metadata/metadata[@name='" . _keyword "']")
+
 			if (!InStr(_Flag, "#") && (!InStr(_Flag, "-") || property = "hide") && _Count)
 				Resources[_ID][property]	:=	_Value
 			}
 		
-		_Value		:=	_Doc.Get(Resources[_ID].Tree . "/User_Data/" . _keyword)
-		, _Flag		:=	_Doc.Get(Resources[_ID].Tree . "/User_Data/" . _keyword . "/@Flag")
-		, _Count	:=	_Doc.Count(Resources[_ID].Tree . "/User_Data/" . _keyword)
+		_Value		:=	_Doc.Get(Resources[_ID].Tree . "/metadata/" . _keyword)
+		_Flag		:=	_Doc.Get(Resources[_ID].Tree . "/metadata/" . _keyword . "/@Flag")
+		_Count	:=	_Doc.Count(Resources[_ID].Tree . "/metadata/" . _keyword)
 		if (!InStr(_Flag, "#") && (!InStr(_Flag, "-") || property = "hide") && _Count)
 			Resources[_ID][property]	:=	_Value	
 		}
@@ -363,12 +361,12 @@ Gui 1: ListView, ProjectUserData_LV
 	LV_Delete()
 	GuiControl -Redraw, ProjectUserData_LV
 
-nodes := _Doc.Node(Resources[sID].Tree . "/User_Data").childNodes	
+nodes := _Doc.Node(Resources[sID].Tree . "/metadata").childNodes	
 Loop nodes.length {
 	
-	metadata	:=	nodes.item(A_Index - 1).nodeName
+	metadata	:=	nodes.item(A_Index - 1).attributes.getNamedItem("name").nodeValue
 	value		:=	nodes.item(A_Index - 1).text
-	flag		:=	nodes.item(A_Index - 1).attributes.getNamedItem("Flag").nodeValue
+	flag		:=	nodes.item(A_Index - 1).attributes.getNamedItem("flag").nodeValue
 	
 	if InStr(flag, "-")
 		continue
@@ -384,41 +382,41 @@ Loop nodes.length {
 Loop 2
 	LV_ModifyCol(A_Index, "AutoHdr")
 
-if (! Resources[sID].HasKey("Status"))
-	Resources[sID].Status					:=	_Doc.Get(Resources[sID].Tree . "/Properties/Status")
-if (! Resources[sID].compatibility.HasKey("Basic"))
-	Resources[sID].compatibility.Basic		:=	_Doc.Get(Resources[sID].Tree . "/Properties/compatibility/Basic")
-if (! Resources[sID].compatibility.HasKey("Lexikos"))
-	Resources[sID].compatibility.Lexikos	:=	_Doc.Get(Resources[sID].Tree . "/Properties/compatibility/Lexikos")
-if (! Resources[sID].compatibility.HasKey("IronAHK"))
-	Resources[sID].compatibility.IronAHK	:=	_Doc.Get(Resources[sID].Tree . "/Properties/compatibility/IronAHK")
-if (! Resources[sID].compatibility.HasKey("AHK2"))
-	Resources[sID].compatibility.AHK2		:=	_Doc.Get(Resources[sID].Tree . "/Properties/compatibility/AHK2")
-if (! Resources[sID].HasKey("ProjectType"))
-	Resources[sID].ProjectType				:=	_Doc.Get(Resources[sID].Tree . "/Properties/Type")
-if (! Resources[sID].HasKey("Purpose"))
-	Resources[sID].Purpose					:=	_Doc.Get(Resources[sID].Tree . "/Properties/Purpose")
-if (! Resources[sID].HasKey("LastMod"))
-	Resources[sID].LastMod					:=	_Doc.Get(Resources[sID].Tree . "/Properties/LastMod")
-if (! Resources[sID].HasKey("Notes"))
-	Resources[sID].Notes					:=	_Doc.Get(Resources[sID].Tree . "/Properties/Notes")
+if (! Resources[sID].HasKey("status"))
+	Resources[sID].status					:=	_Doc.Get(Resources[sID].Tree . "/properties/status")
+if (! Resources[sID].compatibility.HasKey("basic"))
+	Resources[sID].compatibility.basic		:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/basic")
+if (! Resources[sID].compatibility.HasKey("lexikos"))
+	Resources[sID].compatibility.lexikos	:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/lexikos")
+if (! Resources[sID].compatibility.HasKey("ironahk"))
+	Resources[sID].compatibility.ironahk	:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/iron-ahk")
+if (! Resources[sID].compatibility.HasKey("ahk2"))
+	Resources[sID].compatibility.ahk2		:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/ahk-2")
+if (! Resources[sID].HasKey("projecttype"))
+	Resources[sID].projecttype				:=	_Doc.Get(Resources[sID].Tree . "/properties/type")
+if (! Resources[sID].HasKey("purpose"))
+	Resources[sID].purpose					:=	_Doc.Get(Resources[sID].Tree . "/properties/purpose")
+if (! Resources[sID].HasKey("lastmod"))
+	Resources[sID].lastmod					:=	_Doc.Get(Resources[sID].Tree . "/properties/last-mod")
+if (! Resources[sID].HasKey("notes"))
+	Resources[sID].notes					:=	_Doc.Get(Resources[sID].Tree . "/properties/notes")
 
 
-GuiControl 1:	Text, StatDDL,	% Resources[sID].Status
-GuiControl 1:		, AHKB,		% Resources[sID].compatibility.Basic ? 1 : 0
-GuiControl 1:		, AHKL,		% Resources[sID].compatibility.Lexikos ? 1 : 0
-GuiControl 1:		, AHKI,		% Resources[sID].compatibility.IronAHK ? 1 : 0
-GuiControl 1:		, AHK2,		% Resources[sID].compatibility.AHK2 ? 1 : 0
-GuiControl 1:	Text, TypCombo,	% Resources[sID].ProjectType
-GuiControl 1:		, GoalEdit,	% Resources[sID].Purpose
-FormatTime _Temp, % Resources[sID].LastMod, LongDate
-GuiControl 1:		, LModEdit,	% Resources[sID].LastMod := _Temp
+GuiControl 1:	Text, StatDDL,	% Resources[sID].status
+GuiControl 1:		, AHKB,		% Resources[sID].compatibility.basic ? 1 : 0
+GuiControl 1:		, AHKL,		% Resources[sID].compatibility.lexikos ? 1 : 0
+GuiControl 1:		, AHKI,		% Resources[sID].compatibility.ironahk ? 1 : 0
+GuiControl 1:		, AHK2,		% Resources[sID].compatibility.ahk2 ? 1 : 0
+GuiControl 1:	Text, TypCombo,	% Resources[sID].projecttype
+GuiControl 1:		, GoalEdit,	% Resources[sID].purpose
+FormatTime _Temp, % Resources[sID].lastmod, LongDate
+GuiControl 1:		, LModEdit,	% Resources[sID].lastmod := _Temp
 
 GuiControl 1: +Redraw, ProjectFiles_LV
 GuiControl 1: +Redraw, ProjectLibraries_LV
 GuiControl 1: +Redraw, ProjectUserData_LV
 
-SCI_SetText(Gui.SCI2, Resources[sID].Notes)
+SCI_SetText(Gui.SCI2, Resources[sID].notes)
 
 return
 }
