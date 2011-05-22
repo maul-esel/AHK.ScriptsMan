@@ -1,0 +1,25 @@
+﻿<Settings>
+	<paths>
+		<ScriptDir>C:\Users\Dominik\AutoHotkey</ScriptDir>
+		<_7zip></_7zip>
+		<AHK>
+			<Basic></Basic>
+			<Lexikos></Lexikos>
+			<IronAHK></IronAHK>
+			<AHK_2></AHK_2>
+		</AHK>
+	</paths>
+	<language>English</language>
+	<updates enable="0"></updates>
+	
+	<source_languages>
+		<language Name="AutoHotkey">C:\Users\Dominik\AutoHotkey\Global Resources\Keywords_2.hes</language>
+		<language Name="AutoHotkey_L">C:\Users\Dominik\AutoHotkey\Global Resources\Keywords_2.hes</language>
+		<language Name="IronAHK"></language>
+	</source_languages>
+	
+	<tasks>
+		<task Name="finish scintilla">Continue work on scintilla
+				wrapper : it is necessary for this project!</task>
+	</tasks>
+</Settings>

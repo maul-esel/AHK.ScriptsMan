@@ -1,0 +1,744 @@
+/**********************************************************************************************************************************************************************
+Name:													AHK.ScriptsMan beta 1
+AutoHotkey version:										v2
+Language:												custom
+Author:													maul.esel
+***********************************************************************************************************************************************************************
+*/
+v(a){
+MsgBox %a%
+return a
+}
+
+#SingleInstance force
+#KeyHistory 0
+ListLines Off
+OnExit MainWinClose
+global XMLParser, Documents, Resources, Gui, Data_Manager, Keyword
+global null := false
+if (!SVS_CheckFiles()){
+	Menu, Tray, NoIcon
+	Error("the auto-execute section", "-0x0000", "Files are missing.", "Required files include:`n- `"" A_ScriptDir "\AHK.ScriptsMan.dll`"`n"
+		. "- `"" A_ScriptDir "\Settings.xml`"`n- `"" A_ScriptDir "\Keywords_AHK_B.hes`"`n"
+		. "- `"" A_ScriptDir "\Keywords_AHK_L.hes`"`n- `"" A_ScriptDir "\Keywords_AHK_I.hes`"`n- `"" A_ScriptDir "Keywords_AHK_2.hes`"", "Exiting...")
+	ExitApp
+	}
+Menu Tray, Icon, %A_ScriptDir%\AHK.ScriptsMan.dll, 1, 1
+hSCIModule := SCI_Init(A_ScriptDir "\#Extern\Scintilla.dll")
+; ***********************************************************************************************************************************************************************
+Data_Manager := {}
+Data_Manager.ScriptDir := XML_Get("/paths/ScriptDir")
+
+If (SubStr(Data_Manager.ScriptDir, 0) != "\") {
+	_Temp := Data_Manager.ScriptDir
+	_Temp .= "\"
+	Data_Manager.ScriptDir := _Temp
+;	Data_Manager.ScriptDir .= "\"
+	}
+
+; ***********************************************************************************************************************************************************************
+LoopFiles %A_ScriptDir%\Languages\*.xml
+	{
+	if (XML_Get("/Translation/@language", 1, A_LoopFileFullPath) = XML_Get("/language", 1)) {
+		Data_Manager.LanguageXML	:=	A_LoopFileFullPath
+		break
+		}
+	}
+if (! Data_Manager.HasKey("LanguageXML")) {
+	Error("the auto-execute section", "-0x0001", "The language file is missing.", "The language file must be a *.xml file located in`n`"" A_ScriptDir "\Languages`".`n"
+			. "There was no file found that matches the current language setting (`"" XML_Get("/language") "`").", "Exiting...")
+	ExitApp
+	}
+	
+Keyword	:=	{}
+	Keyword.file	:=  {}
+		Keyword.file.Hide			:=	XML_Translation("/KeyWords/Hide")			?	XML_Translation("/KeyWords/Hide")			:	"Hide"
+		Keyword.file.Include		:=	XML_Translation("/KeyWords/Include")		?	XML_Translation("/KeyWords/Hide")			:	"Include"
+		Keyword.file.FileType		:=	XML_Translation("/KeyWords/FileType")		?	XML_Translation("/KeyWords/FileType")		:	"Type"
+		Keyword.file.Description	:=	XML_Translation("/KeyWords/Description")	?	XML_Translation("/KeyWords/Description")	:	"Description"
+		Keyword.file.Path			:=	XML_Translation("/KeyWords/Path")			?	XML_Translation("/KeyWords/Path")			:	"Path"
+	Keyword.lib		:=	{}
+		Keyword.lib.Hide			:=	XML_Translation("/KeyWords/Hide")			?	XML_Translation("/KeyWords/Hide")			:	"Hide"
+		Keyword.lib.Author			:=	XML_Translation("/KeyWords/Author")			?	XML_Translation("/KeyWords/Author")		:	"Author"
+		Keyword.lib.License			:=	XML_Translation("/KeyWords/License")		?	XML_Translation("/KeyWords/License")		:	"License"
+		Keyword.lib.Version			:=	XML_Translation("/KeyWords/Version")		?	XML_Translation("/KeyWords/Version")		:	"Version"
+
+Documents	:=	{}
+Resources	:=	{}
+; **********************************************************************************************************************************************************************
+#include _Source\Gui.ahk
+/*
+Gui 1: Listview, Projects_LV
+	LV_SetImageList( SVS_IL(4, 2, 0), 1)
+Gui 1: Listview, Files_LV
+	LV_SetImageList( SVS_IL(3, 6, 0), 1)
+Gui 1: Listview, ResourceFile_LV
+	LV_SetImageList( SVS_IL(3, 6, 0), 1)
+; **********************************************************************************************************************************************************************
+Gui 1: Add,	Text,		x975	y560								hwndC_01,				% XML_Translation("Descriptions",	"Text.2.1")
+Gui 1: Add,	Combobox,	x1000	y585	w550			sort		hwndC_02	vStatDDL,	% XML_Translation("Misc.",			"Standard.Status")
+
+Gui 1: Add, Text,		x975	y630								hwndC_03,				% XML_Translation("Descriptions",	"Text.2.2")
+Gui 1: Add, Checkbox,	x1000	y655	w150	h30		0x1000		hwndC_04	vAHKB,		AHK (Basic)
+Gui 1: Add, Checkbox,	xp+200	yp		w150	h30		0x1000		hwndC_05	vAHKL,		AHK_L
+Gui 1: Add, Checkbox,	xp+200	yp		w150	h30		0x1000		hwndC_06	vAHKI,		IronAHK
+
+Gui 1: Add, Text,		x975	y700								hwndC_07,				% XML_Translation("Descriptions",	"Text.2.3")
+Gui 1: Add, Combobox,	x1000	y725	w550			sort		hwndC_08	vTypCombo,	% XML_Translation("Misc.",			"Standard.Type")
+
+Gui 1: Add, Text,		x975	y770								hwndC_09,				% XML_Translation("Descriptions",	"Text.2.4")
+Gui 1: Add, Edit,		x1000	y795	w550	r5					hwndC_10	vGoalEdit
+
+Gui 1: Add, Text,		x975	y930								hwndC_11,				% XML_Translation("Descriptions",	"Text.2.5")
+Gui 1: Add, Edit,		x1000	y955	w550	r1		ReadOnly	hwndC_12	vLModEdit
+
+; **********************************************************************************************************************************************************************
+Gui 1: Add, Text,		x75		y125			w200	0x1000	hwndC_01,						% XML_Translation("Descriptions",	"Text.6.1")
+Gui 1: Add, Edit,		x300	y125			w450	0x400	hwndC_02	vPath7zip,			% XML_Get("general",				"path.7zip")
+Gui 1: Add, Button,		x750	y125			w150			hwndC_03	gBrowse7zip,		% XML_Translation("Misc.",			"Command.Browse")
+
+Gui 1: Add, Text,		x75		y175			w200	0x1000	hwndC_04,						% XML_Translation("Descriptions",	"Text.6.2")
+Gui 1: Add, Edit,		x300	y175			w450	0x400	hwndC_05	vPathAHK_B_EXE,		% XML_Get("general",				"path.AHK.B")
+Gui 1: Add, Button,		x750	y175			w150			hwndC_06	gBrowseAHK_B_EXE,	% XML_Translation("Misc.",			"Command.Browse")
+
+Gui 1: Add, Text,		x75		y225			w200	0x1000	hwndC_07,						% XML_Translation("Descriptions",	"Text.6.3")
+Gui 1: Add, Edit,		x300	y225			w450	0x400	hwndC_08	vPathAHK_L_EXE,		% XML_Get("general",				"path.AHK.L")
+Gui 1: Add, Button,		x750	y225			w150			hwndC_09	gBrowseAHK_L_EXE,	% XML_Translation("Misc.",			"Command.Browse")
+
+Gui 1: Add, Text,		x75		y275			w200	0x1000	hwndC_10,						% XML_Translation("Descriptions",	"Text.6.4")
+Gui 1: Add, Edit,		x300	y275			w450	0x400	hwndC_11	vPathAHK_I_EXE,		% XML_Get("general",				"path.AHK.I")
+Gui 1: Add, Button,		x750	y275			w150			hwndC_12	gBrowseAHK_I_EXE,	% XML_Translation("Misc.",			"Command.Browse")
+
+Gui 1: Add, Text,		x75		y325			w200	0x1000	hwndC_13,						% XML_Translation("Descriptions",	"Text.6.5")
+Gui 1: Add, Edit,		x300	y325			w450	0x400	hwndC_14	vPathScripts,		% XML_Get("general",				"ScriptDir")
+Gui 1: Add, Button,		x750	y325			w150			hwndC_15	gBrowseScriptDir,	% XML_Translation("Misc.",			"Command.Browse")
+
+Gui 1: Add, Text,		x75		y425			w200	0x1000	hwndC_16,						% XML_Translation("Descriptions",	"Text.6.6")
+Gui 1: Add, DDL,		x300	y425			w450	0x1000	hwndC_17	vUserLanguage,		% SVS_GetAvailableLanguages(false)
+
+Gui 1: Add, Checkbox,	x75		y475	h30		w675	0x1000	hwndC_18	vEnableUpdates,		% XML_Translation("Descriptions",	"Text.6.7")
+Gui 1: Add, Button,		x75		y525			w675			hwndC_19					,	% XML_Translation("Descriptions",	"Text.6.8")
+
+Gui 1: Add, Text,		x1050	y175			w200	0x1000	hwndC_21,						% XML_Translation("Descriptions",	"Text.6.10")
+Gui 1: Add, Edit,		x1275	y175			w200	number	hwndC_22	
+
+GuiControl 1:	ChooseString,	UserLanguage,		% XML_Get("general",	"Language")
+*/
+Data_List()
+Gui 1: Show, Maximize, % "AHK.ScriptsMan - " (A_IsCompiled ? "(executable)" : "(script)")
+OnMessage(0x4E, "WM_Notify")
+return
+; **********************************************************************************************************************************************************************
+; **********************************************************************************************************************************************************************
+Project_Add() {
+
+InputBox _Project, AHK.ScriptsMan, % XML_Translation("/UserInterface/Dialogs/CreateProject", 1),,,,,,,60
+if (ErrorLevel || !_Project)
+	return 0
+
+if (Resources.List.HasKey(_Project)){
+	Error(A_ThisFunc "()", "-0x0003", "duplicate resource name (invalid user input)", XML_Translation("/UserInterface/Dialogs/CreateProject", 2), "The operation will be aborted.")
+	return
+	}
+
+InputBox _Parent, AHK.ScriptsMan, % XML_Translation("/UserInterface/Dialogs/CreateProject", 3),,,,,,,60
+if (ErrorLevel || !_Parent){
+	_Parent := null
+	_Path := _Project
+	Loop {
+		if FileExist(A_ScriptDir "\#Data\" _Path ".xml")
+			_Path := A_Index "-" _Project
+		else
+			break
+		}
+	_Path := A_ScriptDir "\#Data\" _Path ".xml"
+
+	xml := "<Resource Name=""" _Project """ DataType=""project"">`r`n"
+		. "`t<Properties>`r`n"
+		. "`t`t<compatibility>`r`n"
+		. "`t`t</compatibility>`r`n"
+		. "`t</Properties>`r`n"
+		. "`t<Files>`r`n"
+		. "`t</Files>`r`n"
+		. "`t<Libraries>`r`n"
+		. "`t</Libraries>`r`n"
+		. "`t<User_Data>`r`n"
+		. "`t</User_Data>`r`n"
+		. "`t<Tasks>`r`n"
+		. "`t</Tasks>`r`n"
+		. "</Resource>"
+	FileAppend %xml%, %_Path%
+	xml := new XMLParser(xml, true)
+} else {
+	if (!IsType(_Parent, "integer") || !Resources[_Parent].Type = "project")
+		{
+		MsgBox 16, AHK.ScriptsMan, % XML_Translation("/UserInterface/Dialogs/CreateProject", 4)
+		return
+		}
+	_Path := Resources[_Parent].File
+	xml := "<Sub Name=""" _Project """>"
+		. "`t<Properties>`r`n"
+		. "`t`t<compatibility>`r`n"
+		. "`t`t</compatibility>`r`n"
+		. "`t</Properties>`r`n"
+		. "`t<Files>`r`n"
+		. "`t</Files>`r`n"
+		. "`t<Libraries>`r`n"
+		. "`t</Libraries>`r`n"
+		. "`t<User_Data>`r`n"
+		. "`t</User_Data>`r`n"
+		. "`t<Tasks>`r`n"
+		. "`t</Tasks>`r`n"
+		. "</Sub>"
+	xml := new XMLParser(xml, true)
+	Resources[_Parent].XML.doc.documentElement.appendChild(xml)
+	xml := Resources[_Parent].XML
+	xml.Save(Resources[_Parent].File)
+	}
+
+_ID := TV_Add(_Project, _Parent, "Icon3")
+TV_SetStateImage(Gui.Treeview.Handle, _ID, 1)
+Resources[_ID]	:=	{"Name"			:	_Project
+					, "Type"			:	"project"
+					, "context" 		:	_Parent ? "project" : "toplevel"
+					, "ParentID"		:	_Parent
+					, "ParentTree"		:	Resources[_Parent].ParentTree (_Parent != 0 ? " >> " : "") _Name
+					, "XML"				:	xml
+					, "Priority"		:	1
+					, "Tree"			:	_Parent ? (Resources[_Parent].Tree . "/Sub[" . Resources[_Parent].XML.Count(Resources[_Parent].Tree . "/Sub") - 1 "]") : "/Resource"
+					, "compatibility"	:	{}
+					, "File"			:	_Path}
+return Project_Open(_ID)
+}
+; **********************************************************************************************************************************************************************
+Project_Save() {
+
+Resources[Resources.ActiveID].Notes := SCI_GetText(Gui.SCI2)
+GuiControlGet, _Var, 1:, StatDDL
+
+Resources[Resources.ActiveID].Notes := SCI_GetText(Gui.SCI2)
+
+; use XML && Tree properties
+; set all info with xpath()
+; save with xpath_save()
+
+return
+
+IniWrite	%StatDDL%,	%_File%,	properties,		Status
+IniWrite	%AHKB%,		%_File%,	properties,		AHK.B
+IniWrite	%AHKL%,		%_File%,	properties,		AHK.L
+IniWrite	%AHKI%,		%_File%,	properties,		AHK.I
+IniWrite	%TypCombo%,	%_File%,	properties,		Type
+;SVS_Convert2XML(GoalEdit)
+IniWrite	%GoalEdit%,	%_File%,	properties,		Purpose
+IniWrite	%A_Now%,	%_File%,	properties,		Last.Mod ;==========================================================================================================================
+
+;SVS_Convert2XML(_Text)
+IniWrite	%_Text%,	%_File%,	properties,		Notes
+
+return
+}
+
+IsType(val, type){
+
+if val is %type%
+	return true
+if (type = "object" && IsObject(val))
+	return true
+return false
+}
+; **********************************************************************************************************************************************************************
+Project_SetPriority() {
+
+if (Resources[Resources.ActiveID].Type != "project")
+	return -1
+
+Inputbox _Priority, AHK.ScriptsMan, % XML_Translation("/UserInterface/Dialogs/SetPriority", 1),,,,,,,60
+if (ErrorLevel || !_Priority)
+	return -1
+if (_Priority != 1 && _Priority != 2 && _Priority != 3) {
+	Error(A_ThisFunc "()", "-0x0004", "invalid project priority (invalid user input)", XML_Translation("/UserInterface/Dialogs/SetPriority", 2), "the operation will be aborted")
+	return -1
+	}
+
+if not (_File := Resources[Resources.ActiveID].File)
+	return -1
+
+Resources[Resources.ActiveID].Priority := _Priority	
+TV_SetStateImage(Gui.Treeview.Handle, Resources.ActiveID, _Priority)
+
+return
+}
+; **********************************************************************************************************************************************************************
+Project_AddUserData() {
+_Project := SVS_GetFilePath(Resources.ActiveID)
+
+InputBox _Name, AHK.ScriptsMan, % XML_Translation("/UserInterface/Dialogs/CreateUserData", 1)
+if (ErrorLevel || !_Name)
+	return
+InputBox _Value, AHK.ScriptsMan, % XML_Translation("/UserInterface/Dialogs/CreateUserData", 2)
+if (ErrorLevel)
+	return
+MsgBox 260, AHK.ScriptsMan, % XML_Translation("/UserInterface/Dialogs/CreateUserData", 3)
+IfMsgBox, Yes
+	_Flags := "#"
+MsgBox 260, AHK.ScriptsMan, % XML_Translation("/UserInterface/Dialogs/CreateUserData", 4)
+IfMsgBox, Yes
+	_Flags .= "+"
+
+;_Name := SVS_Convert2XML(_Name)
+;IniWrite %_Value%, %_Project%, User.Data, %_Name%[%_Flags%]
+
+Gui 1: Default
+Gui 1: Listview, UserData_LV
+LV_Add("", (InStr(_Flags, "+") ? "[+] " : "") _Name, _Value)
+
+Loop 2
+	LV_ModifyCol(A_Index, "AutoHdr")
+	
+if InStr(_Flags, "+") {
+	Gui 1: Listview, Projects_LV
+	
+	Loop % LV_GetCount()
+		{
+		LV_GetText(_Project, A_Index, 1)
+		if (_Project = A_LastProject) {
+			_Row := A_Index
+			break
+			}		
+		}
+	if (!_Row)
+		return -1
+	Loop 4
+		LV_GetText(_Col%A_Index%, _Row, A_Index)
+	LV_Modify(_Row, "", _Col1, _Col2, _Col3, _Col4, _Name ": " _Value)
+	}
+	
+return
+}
+
+; **********************************************************************************************************************************************************************
+Task_Add() {
+
+InputBox _Name,		AHK.ScriptsMan,	% XML_Translation("/UserInterface/Dialogs/CreateTask"),,,,,,,60
+if (ErrorLevel || !_Name)
+	return
+
+Loop {
+;	IniRead		_Var,	%A_ScriptDir%\#Data\AHK.ScriptsMan.ini,	tasks,	%_Task%.Description
+	if (_Var != "ERROR")
+		_Task := A_Index "_" _Task
+	else
+		break
+	}
+
+;IniWrite	%_Name%,	%A_ScriptDir%\#Data\AHK.ScriptsMan.ini,	tasks,	% SVS_Convert2Key(_Task) "[]"
+;IniWrite	%_Text%,	%A_ScriptDir%\#Data\AHK.ScriptsMan.ini,	tasks,	% SVS_Convert2Key(_Task) ".Description"
+;IniWrite	0,			%A_ScriptDir%\#Data\AHK.ScriptsMan.ini,	tasks,	% SVS_Convert2Key(_Task) ".Remember" ;==================================================================
+
+Gui 1: Default
+Gui 1: Listview, Tasks_LV
+_Var := LV_Add("", _Name)
+;Tasks_LV("Normal", _Var)
+return
+}
+; **********************************************************************************************************************************************************************
+Lib_Add() {
+
+InputBox	_Name,	AHK.ScriptsMan,	% XML_Translation("/UserInterface/Dialogs/AddLib", 1),,,,,,,60
+if (ErrorLevel || !_Name)
+	return
+
+_Path := _Name
+Loop {
+	if FileExist(A_ScriptDir "\#Data\" _Path ".xml")
+		break
+	_Path := A_Index "-" _Name
+	}
+
+;IniWrite	%_Name%,	%A_ScriptDir%\#Data\%_Lib%.svlib,	general,	Name
+;IniWrite	Library,	%A_ScriptDir%\#Data\%_Lib%.svlib,	general,	Res.Type
+
+MsgBox 4, AHK.ScriptsMan,	% XML_Translation("/UserInterface/Dialogs/AddLib", 2), 60
+IfMsgBox, Yes
+	{
+	FileSelectFile	_Path,	3,	%_ScriptDir%, % XML_Translation("/UserInterface/Dialogs/AddLib", 3)
+	;if _Path
+	;	IniWrite	%_Path%,	%A_ScriptDir%\#Data\%_Lib%.svlib, User.Data,	Path[]
+	}
+
+return
+}
+; **********************************************************************************************************************************************************************
+File_Add() {
+
+InputBox	_Name,	AHK.ScriptsMan,	% XML_Translation("/UserInterface/Dialogs/AddFile", 1),,,,,,,60
+if (ErrorLevel || !_Name)
+	return
+
+_Path := _Name
+Loop {
+	if FileExist(A_ScriptDir "\#Data\" _Path ".xml")
+		break
+	_Path := A_Index "-" _Name
+	}
+
+;IniWrite	%_Name%,	%A_ScriptDir%\#Data\%_File%.svfile,	general,	Name
+;IniWrite	File,		%A_ScriptDir%\#Data\%_File%.svfile,	general,	Res.Type
+
+MsgBox 4, AHK.ScriptsMan,	% XML_Translation("/UserInterface/Dialogs/AddFile", 2), 60
+IfMsgBox, Yes
+	{
+	FileSelectFile	_Path,	3,	%_ScriptDir%, % XML_Translation("/UserInterface/Dialogs/AddFile", 3)
+	if _Path
+		{
+;		IniWrite	%_Path%,	%A_ScriptDir%\#Data\%_File%.svfile, User.Data,	Path[]
+		FileGetSize _Size, %_Path%, K
+		}
+	}
+
+return
+}
+; **********************************************************************************************************************************************************************
+Resource_Package(ID){
+
+if not _7zip := XML_Get("Settings/paths/7zip")
+	return -1
+	
+command := "cd /D """ A_ScriptDir "\#Temp\Package"""
+command := command " && ""%_7zip%"" a -ssw -t7z -r ""..\" SVS_F """ "".\" Resource[ID].Name """ && exit"
+command := """" command """"
+
+run %comspec% /k %command%, %A_ScriptDir%\#Temp
+
+return
+}
+; **********************************************************************************************************************************************************************
+UI_Event_Handler(sHwnd, sEvent, sText, sPos, sID) {
+tooltip %sID%
+If (sEvent != "click")
+	return
+
+if (sID = 211) {
+	if Project_Add()
+		UI_Event_Handler(0, "click", "", 0, 312)
+} else if (sID = 221) {
+	Gui 2: Show, w1250 h800, AHK.ScriptsMan - resources
+} else if (sID = 222) {
+	Project_AddUserData()
+	return -1
+} else if (sID = 223) {
+	Project_Save()
+	return -1
+} else if (sID = 224) {
+	Project_SetPriority()
+	return -1
+} else if (sID = 231) {
+	;SCI_SaveFile()
+} else if (sID = 232) {
+	;SaveAs
+	FileSelectFile _SavePlace, S27, %ScriptDir%,, Scripts (*.ahk; *.ahkl; *.ahki; *.ia)
+	If ErrorLevel
+		return -2
+	FileDelete %_SavePlace%
+	;HE_SaveFile(HwndHEdit3, _SavePlace, -1)
+} else if (sID = 233) {
+	;_Files := HE_GetFileCount(HwndHEdit2)
+	;Loop %_Files% {
+	;	If (_Name := HE_GetFileName(HwndHEdit2, A_Index))
+	;		HE_SaveFile(HwndHEdit2, _Name, A_Index)
+	;	}
+} else if (sID = 234) {
+	;if (_Name := HE_GetFileName(HwndHEdit2, -1))
+	;		HE_SaveFile(HwndHEdit2, _Name, -1)
+	;HE_CloseFile(HwndHEdit2, -1)
+} else if (sID = 235) {
+	FileSelectFile _File, 11, %_ScriptsDir%,, Scripts (*.ahk; *.ahkl; *.ahki; *.ia)
+	;if _File
+	;	HE_OpenFile(HwndHEdit2, _File, true)
+} else if (sID = 241) {
+	;_Text := HE_GetSelText(HwndHEdit2)
+	_Text := SCI_GetSelection(Data_Manager.SCI2.Handle)
+	;Dlg_Find(HwndHEdit2, "Dlg_Find_Event", "-d", _Text)
+} else if (sID = 242) {
+	_Text := SCI_GetSelection(Data_Manager.SCI2.Handle)
+	;Dlg_Replace(HwndHEdit2, "Dlg_Replace_Event", "-d-c-w", _Text)
+	return -1
+} else if (sID = 243) {
+	Menu Context_Language, Show
+} else if (sID = 246) {
+	return SCI_Undo(Data_Manager.SCI2.Handle)
+} else if (sID = 247) {
+	return SCI_Redo(Data_Manager.SCI2.Handle)
+} else if (sID = 251) {
+	Lib_Add()
+	return -1
+} else if (sID = 252) {
+	File_Add()
+	return -1
+} else if (sID = 253) {
+	; AddUdat(, "db")
+	return -1
+} else if (sID = 261) {
+	Task_Add()
+} else if (sID = 271) {
+	
+} else if (sID = 111) {
+	Gui 1: Default
+	Gui 1: Listview, Projects_LV
+	_Row := LV_GetNext()
+	LV_GetText(_Project, _Row, 1)
+	Project_Open(_Project)
+	UI_Event_Handler(0, "click", "", 0, 312)
+} else if (sID = 112) {
+	return -1
+} else if (sID = 113) {
+	Gui 1: Default
+	Gui 1: Listview, Projects_LV
+	_Row := LV_GetNext()
+	LV_GetText(_Project, _Row)
+	_Path := SVS_GetFilePath(_Project)
+	FileDelete % _Path
+	LV_Delete(_Row)
+	Gui 1: Treeview, TreeProjects
+	;_ID := TV_GetID(_Project)
+	if _ID
+		TV_Delete(_ID)
+	TV_Delete(_ID)
+	LV_GetText(_Project, _Row)
+	Project_Open(_Project)
+} else if (sID = 121) {
+	Gui 1: Default
+	Gui 1: Listview, Projects_LV
+	_Row := LV_GetNext()
+	LV_GetText(_File, _Row, 1)
+	;OpenFile_Edit(_File)
+} else if (sID = 126) {
+	Gui 1: Default
+	Gui 1: Listview, Files_LV
+	_Row := LV_GetNext()
+	LV_GetText(_File, _Row, 6)
+	run rundll32.exe shell32.dll`,OpenAs_RunDLL %_File%
+} else if (sID = 171) {
+;	Gui 1: Default
+;	Gui 1: Listview, Tasks_LV
+	
+;	_Row := LV_GetNext()
+;	LV_GetText(_TaskName, _Row)
+;	_Task1 := SVS_GetKeyName(A_ScriptDir "\#Data\AHK.ScriptsMan.ini", "tasks", _TaskName, false)
+;	_Task2 := SVS_GetKeyName(A_ScriptDir "\#Data\AHK.ScriptsMan.ini", "tasks", _TaskName, true)
+;	IniDelete	%A_ScriptDir%\#Data\AHK.ScriptsMan.ini,	tasks,	%_Task1%
+;	IniDelete	%A_ScriptDir%\#Data\AHK.ScriptsMan.ini,	tasks,	%_Task2%.Priority
+;	IniDelete	%A_ScriptDir%\#Data\AHK.ScriptsMan.ini,	tasks,	%_Task2%.Description
+;	IniDelete	%A_ScriptDir%\#Data\AHK.ScriptsMan.ini,	tasks,	%_Task2%.Remember
+	
+;	LV_Delete(_Row)
+	;if (Tasks_LV("Normal", 1) = -1)
+	;	HE_CloseFile(HwndHEdit3, -2)
+	}
+return true
+}
+
+; **********************************************************************************************************************************************************************
+Dlg_Find_Event(sEvent, sFlags, sFindText, sUnused) {
+static pos := 0
+MsgBox
+global HwndHEdit2
+SoundBeep
+if (Event = "C")
+	return
+;pos := HE_FindText(HwndHEdit2, FindText, pos, -1, (InStr(Flags, "w") ? "WHOLEWORD " : "") . (InStr(Flags, "c") ? "MATCHCASE"))
+if (pos = -1)
+	return
+SCI_SetSelection(Data_Manager.SCI2.Handle, pos, pos + StrLen(FindText))
+;HE_SetSel(HwndHEdit2, pos, pos + StrLen(FindText))
+return
+}
+; **********************************************************************************************************************************************************************
+Dlg_Replace_Event(sEvent, sFlags, sFindText, sReplaceText) {
+static pos := 0
+global HwndHEdit2
+SoundBeep
+if (Event = "C")
+	return
+if (Event = "F") {
+	;pos := HE_FindText(HwndHEdit2, FindText, pos, -1, (InStr(Flags, "w") ? "WHOLEWORD " : "") . (InStr(Flags, "c") ? "MATCHCASE"))
+	if (pos = -1)
+		return
+	SCI_SetSelection(Data_Manager.SCI2.Handle, pos, pos + StrLen(FindText))
+;	HE_SetSel(HwndHEdit2, pos, pos + StrLen(FindText))
+} else if (Event = "R") {
+	;pos := HE_FindText(HwndHEdit2, FindText, pos -1, -1, (InStr(Flags, "w") ? "WHOLEWORD " : "") . (InStr(Flags, "c") ? "MATCHCASE"))
+	if (pos = -1)
+		return
+	SCI_SetSelection(Data_Manager.SCI2.Handle, pos, pos + StrLen(FindText))
+	;HE_SetSel(HwndHEdit2, pos, pos + StrLen(FindText))
+	SCI_ReplaceSelection(Data_Manager.SCI2.Handle, ReplaceText)
+	;HE_ReplaceSel(HwndHEdit2, ReplaceText)
+} else if (Event = "A") {
+	Loop {
+		;pos := HE_FindText(HwndHEdit2, FindText, pos -1, -1, (InStr(Flags, "w") ? "WHOLEWORD " : "") . (InStr(Flags, "c") ? "MATCHCASE"))
+		if (pos = -1)
+			break
+		SCI_SetSelection(Data_Manager.SCI2.Handle, pos, pos + StrLen(FindText))
+		;HE_SetSel(HwndHEdit2, pos, pos + StrLen(FindText))
+		SCI_ReplaceSelection(Data_Manager.SCI2.Handle, ReplaceText)
+		;HE_ReplaceSel(HwndHEdit2, ReplaceText)		
+		}
+	}
+return
+}
+; **********************************************************************************************************************************************************************
+Files_Register(sBool) {
+if sBool
+	RegWrite 
+else
+	RegDelete
+return ErrorLevel
+}
+; **********************************************************************************************************************************************************************
+; **********************************************************************************************************************************************************************
+HideWins:
+if (!Hidden)
+	Gui 1: Hide
+else 
+	Gui 1: Show
+Hidden := !Hidden
+return
+; **********************************************************************************************************************************************************************
+Restart:
+If (!B_ExitCode) {
+	B_ExitCode := 2
+	Gosub MainWinClose
+	}
+return
+; **********************************************************************************************************************************************************************
+ClickList:
+;if (A_GuiEvent = "RightClick" && A_GuiControl != "ResourceData_LV" && A_GuiControl != "Resource_Projects_LV")
+;	Menu, Context_%A_GuiControl%, Show
+if IsFunc(A_GuiControl)
+	%A_GuiControl%(A_GuiEvent, A_EventInfo)
+return
+; **********************************************************************************************************************************************************************
+SelectLanguage:
+return
+; **********************************************************************************************************************************************************************
+OpenHelp:
+If FileExist(A_ScriptDir . "\AHK.ScriptsMan.chm")
+	run AHK.ScriptsMan.chm
+return
+; **********************************************************************************************************************************************************************
+Browse7zip:
+FileSelectFile Path7zip, 3, %A_ProgramFiles%, % XML_Translation("/UserInterface/Dialogs/Browse7zip"), (*.exe)
+if not Path7zip
+	return
+SplitPath Path7zip, , , Ext
+if (Ext != "EXE")
+	return
+GuiControl 1: , Path7zip, %Path7zip%
+SVS_SetSetting("/path/7zip", Path7zip)
+return
+; **********************************************************************************************************************************************************************
+BrowseAHK_B_EXE:
+SVS_BrowseAHK_Exe("B")
+return
+; **********************************************************************************************************************************************************************
+BrowseAHK_L_EXE:
+SVS_BrowseAHK_Exe("L")
+return
+; **********************************************************************************************************************************************************************
+BrowseAHK_I_EXE:
+SVS_BrowseAHK_Exe("I")
+return
+; **********************************************************************************************************************************************************************
+BrowseScriptDir:
+FileSelectFolder ScriptDir, *%A_ProgramFiles%, 3, % XML_Translation("/UserInterface/Dialogs/BrowseScriptDir")
+if not ScriptDir
+	return
+GuiControl 1:, PathScripts, %ScriptDir%
+SVS_SetSetting("paths/ScriptDir", ScriptDir)
+return
+; **********************************************************************************************************************************************************************
+RememberTasks:
+return
+; **********************************************************************************************************************************************************************
+Create_Menus() {
+
+Ico := 38
+Loop 3 {
+	If (Item := XML_Translation("/UserInterface/MainGui/Projects/MenuItem", A_Index)) {
+		Menu Context_TV, Add,	%Item%, OnContext
+		Menu Context_TV, Icon,	%Item%, %A_ScriptDir%\AHK.ScriptsMan.dll, %Ico%, 25
+		}
+	Ico++
+	}
+
+Loop 6 {
+	if (Item := XML_Translation("/UserInterface/MainGui/Projects/Files/MenuItem", A_Index)) {
+		Menu Context_Files_LV, Add,	%Item%, OnContext
+		Menu Context_Files_LV, Icon,	%Item%, %A_ScriptDir%\AHK.ScriptsMan.dll, %Ico%, 25
+		}
+	If (A_Index = 2 || A_Index = 5)
+		Menu Context_Files_LV, Add
+	Ico++
+	}
+
+
+Loop 4 {
+	If (Item := XML_Translation("/UserInterface/MainGui/Projects/Libraries/MenuItem", A_Index)) {
+		Menu Context_Libraries_LV, Add,	%Item%, OnContext
+		Menu Context_Libraries_LV, Icon,	%Item%, %A_ScriptDir%\AHK.ScriptsMan.dll, %Ico%, 25
+		}
+	If (A_Index = 2 || A_Index = 3)
+		Menu Context_Libraries_LV, Add
+	Ico++
+	}	
+	
+Loop 2 {
+	if (Item := XML_Translation("/UserInterface/MainGui/Projects/UserData/MenuItem", A_Index)) {
+		Menu Context_UserData_LV, Add,	%Item%, OnContext
+		Menu Context_UserData_LV, Icon,	%Item%, %A_ScriptDir%\AHK.ScriptsMan.dll, %Ico%, 25
+		}
+	Ico++
+	}
+
+Loop 3 {
+	if (Item := XML_Translation("/UserInterface/MainGui/Tasks/MenuItem", A_Index)) {
+		Menu Context_Tasks_LV, Add,		%Item%, OnContext
+		Menu Context_Tasks_LV, Icon,		%Item%,	%A_ScriptDir%\AHK.ScriptsMan.dll, %Ico%, 25
+		}
+	if (A_Index = 1)
+		Menu Context_Tasks_LV, Add
+	Ico++
+	}
+
+Loop % XML_Get("/source_languages/available")
+	{
+	if (curr_Language := XML_Get("/source_languages/language", A_Index)) {
+		Menu Context_Language, Add, %curr_Language%, SelectLanguage
+		Menu Context_Language, Add
+		}
+	}
+
+return
+}
+
+
+Error(caller, code, reason, details, reaction){
+MsgBox 4112, AHK.ScriptsMan - ERROR, An error occured during execution: `n`nerror %code% ("%reason%")`noccured in %caller%`n`ndetails:`n%details%`n`nreaction:`t%reaction%, 60
+return
+}
+
+#Include %A_ScriptDir%\#Extern
+	#Include Panel.ahk
+	#Include Toolbar.ahk
+	#Include TVM.ahk
+	
+#Include <scintilla>
+
+#Include %A_ScriptDir%\_Source
+	#Include Data.ahk
+	#Include divers.ahk
+	#Include Gui_Helper.ahk
+	#include Gui_Event.ahk
+	#include xmlparser.ahk
