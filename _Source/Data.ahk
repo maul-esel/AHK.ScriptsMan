@@ -203,15 +203,19 @@ Gui 1: Listview, ResourceUserData_LV
 	LV_Delete()
 	GuiControl 1: -Redraw, ResourceUserData_LV
 
-nodes := _Doc.Node(Resources[sID].Tree . "/metadata")
-Loop nodes.childNodes.length
+nodes := _Doc.Node(Resources[sID].Tree . "/metadata").childNodes
+Loop nodes.length
 	{
-	_Value := nodes.childNodes.item(A_Index - 1).text
-	_Name := nodes.childNodes.item(A_Index - 1).nodeName
+	_Name	:=	nodes.item(A_Index - 1).attributes.getNamedItem("name").nodeValue
+	_Value	:=	nodes.item(A_Index - 1).text
+	_Flag	:=	nodes.item(A_Index - 1).attributes.getNamedItem("flag").nodeValue
+	
+	if InStr(_Flag, "-")
+		continue
 	
 	for property, _keyword in Keyword.file
 		{
-		if (! Resources[sID].HasKey(property) && _Name = _keyword && _keyword != "Include" && _keyword != "Hide")
+		if (! Resources[sID].HasKey(property) && _Name = _keyword && _keyword != "Include" && _keyword != "Hide" && !InStr(_Flag, "#"))
 			Resources[sID][property] := _Value
 		}
 	LV_Add("", _Name, _Value)
@@ -227,7 +231,19 @@ _Text := XML_Translation("/KeyWords/Name", 1)	. ":`t`t"	. Resources[sID].Name			
 
 GuiControl 1: , ResourceInfo, %_Text%
 
+Gui 1: ListView, ResourceProjects_LV
+	LV_Delete()
+	GuiControl 1: -Redraw, ResourceProjects_LV
+
+nodes := _Doc.Node(Resources[sID].Tree . "/projects").childNodes
+Loop nodes.length
+	{
+	LV_Add("", nodes.item(A_Index - 1).attributes.getNamedItem("name").nodeValue)
+	
+	}
+
 GuiControl 1: +Redraw, ResourceUserData_LV
+GuiControl 1: +Redraw, ResourceProjects_LV
 
 If (!FileIsBinary(Resources[sID].File)){
 	FileRead _Temp, % Resources[sID].File
