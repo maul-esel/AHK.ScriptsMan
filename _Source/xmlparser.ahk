@@ -7,7 +7,15 @@ class XMLParser
 		else
 			this.Load(data)
 		}
-	
+		
+/*	__Get(property){
+		return this.doc[property]
+		}
+		
+	__Set(property, value){
+		return this.doc[property] := value
+		}
+*/		
 	Load(file){
 		return this.doc.Load(file)
 		}
@@ -33,6 +41,7 @@ class XMLParser
 		}
 	
 	Save(location){
+		FileDelete %location%
 		FileAppend % this.doc.xml, %location%
 		return ErrorLevel
 		}
@@ -43,9 +52,9 @@ class XMLParser
 		
 	SetText(xpath, value, index=1){
 		if this.HasNode(xpath, index)
-			return this.doc.selectNodes(xpath).item(index-1).text := value
+			return this.doc.selectNodes(xpath).item(index-1).text := XML_Encode(value)
 		else
-			return this.Node(SubStr(xpath, 1, InStr(xpath, "/", 0, -1)-1)).appendChild(this.doc.createElement(SubStr(xpath, InStr(xpath, "/", 0, 0)+1, StrLen(xpath)))).text := value
+			return this.Node(SubStr(xpath, 1, InStr(xpath, "/", 0, -1)-1)).appendChild(this.doc.createElement(SubStr(xpath, InStr(xpath, "/", 0, 0)+1, StrLen(xpath)))).text := XML_Encode(value)
 		}
 	}
 

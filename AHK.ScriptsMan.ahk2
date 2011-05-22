@@ -16,7 +16,7 @@ ListLines Off
 OnExit MainWinClose
 global XMLParser, Documents, Resources, Gui, Data_Manager, Keyword
 global null := false
-if (!SVS_CheckFiles()){
+if FilesAreMissing(){
 	Menu, Tray, NoIcon
 	Error("the auto-execute section", "-0x0000", "Files are missing.", "Required files include:`n- `"" A_ScriptDir "\AHK.ScriptsMan.dll`"`n"
 		. "- `"" A_ScriptDir "\Settings.xml`"`n- `"" A_ScriptDir "\Keywords_AHK_B.hes`"`n"
@@ -59,7 +59,7 @@ Keyword	:=	{}
 		Keyword.file.Path			:=	XML_Translation("/KeyWords/Path")			?	XML_Translation("/KeyWords/Path")			:	"Path"
 	Keyword.lib		:=	{}
 		Keyword.lib.Hide			:=	XML_Translation("/KeyWords/Hide")			?	XML_Translation("/KeyWords/Hide")			:	"Hide"
-		Keyword.lib.Author			:=	XML_Translation("/KeyWords/Author")			?	XML_Translation("/KeyWords/Author")		:	"Author"
+		Keyword.lib.Author			:=	XML_Translation("/KeyWords/Author")			?	XML_Translation("/KeyWords/Author")			:	"Author"
 		Keyword.lib.License			:=	XML_Translation("/KeyWords/License")		?	XML_Translation("/KeyWords/License")		:	"License"
 		Keyword.lib.Version			:=	XML_Translation("/KeyWords/Version")		?	XML_Translation("/KeyWords/Version")		:	"Version"
 
@@ -237,15 +237,6 @@ IniWrite	%A_Now%,	%_File%,	properties,		Last.Mod ;==============================
 IniWrite	%_Text%,	%_File%,	properties,		Notes
 
 return
-}
-
-IsType(val, type){
-
-if val is %type%
-	return true
-if (type = "object" && IsObject(val))
-	return true
-return false
 }
 ; **********************************************************************************************************************************************************************
 Project_SetPriority() {

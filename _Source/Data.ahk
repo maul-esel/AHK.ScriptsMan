@@ -227,7 +227,7 @@ Loop 2
 _Text := XML_Translation("/KeyWords/Name", 1)	. ":`t`t"	. Resources[sID].Name			. "`n"
 		. Keyword.file.FileType					. ":`t`t"	. Resources[sID].FileType		. "`n"
 		. Keyword.file.Description				. ":`t"		. Resources[sID].Description	. "`n"
-		. Keyword.file.Path						. ":`t`t"	. Resources[sID].Path
+		. Keyword.file.Path						. ":`t`t"	. AbsolutePath(Resources[sID].Path)
 
 GuiControl 1: , ResourceInfo, %_Text%
 
@@ -363,22 +363,22 @@ Gui 1: ListView, ProjectUserData_LV
 	LV_Delete()
 	GuiControl -Redraw, ProjectUserData_LV
 
-nodes := _Doc.GetNodes(Resources[sID].Tree . "/User_Data", "childNodes")	
+nodes := _Doc.Node(Resources[sID].Tree . "/User_Data").childNodes	
 Loop nodes.length {
-	node := nodes.item(A_Index - 1).text
-	if not RegExMatch(node, "^\s*<([^\s=]*)(?:\s([^=\s]*)=([^=\s]*))*>([^<>]*)</([^\s=]*).*>\s*$", result)
-		continue
-	if (result1 != result5)
+	
+	metadata	:=	nodes.item(A_Index - 1).nodeName
+	value		:=	nodes.item(A_Index - 1).text
+	flag		:=	nodes.item(A_Index - 1).attributes.getNamedItem("Flag").nodeValue
+	
+	if InStr(flag, "-")
 		continue
 		
-	if (result2 = "Flag" && InStr(result3, "-"))
-		continue
-	if (result2 = "Flag" && InStr(result3, "+")) {
-		result1 := "[+] " result1
-		Resources[sID].DefData := result1
+	if InStr(flag, "+") {
+		Resources[sID].DefData := metadata
+		metadata := "[+] " metadata
 		}
 	
-	LV_Add("", result1, result4)
+	LV_Add("", metadata, value)
 	
 	}
 Loop 2

@@ -18,8 +18,8 @@ SVS_SetSetting("general", "path.AHK." (sAHK = "B" ? "B" : (sAHK = "L" ? "L" : "I
 return
 }
 ; **********************************************************************************************************************************************************************
-SVS_CheckFiles() {
-return (FileExist(A_ScriptDir "\AHK.ScriptsMan.dll") 
+FilesAreMissing() {
+return !(FileExist(A_ScriptDir "\AHK.ScriptsMan.dll") 
 		&& FileExist(A_ScriptDir "\Settings.xml")
 		&& FileExist(A_ScriptDir "\Keywords_AHK_B.hes")
 		&& FileExist(A_ScriptDir "\Keywords_AHK_L.hes")
@@ -147,4 +147,27 @@ Loop buttons.length {
 	}
 ;MsgBox, 4096,,% _Hdr
 return _Hdr
+}
+
+AbsolutePath(path){
+if ! DllCall("Shlwapi\PathIsRelative", "str", path)
+	return path
+	
+if (InStr(path, "\") = 1)
+	path := SubStr(path, 2, StrLen(path) -1)
+
+if FileExist( Data_Manager.ScriptDir . path)
+	return Data_Manager.ScriptDir . path
+
+else
+	return "...\" path
+}
+
+IsType(val, type){
+
+if val is %type%
+	return true
+if (type = "object" && IsObject(val))
+	return true
+return false
 }
