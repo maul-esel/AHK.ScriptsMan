@@ -26,51 +26,6 @@ return !(FileExist(A_ScriptDir "\AHK.ScriptsMan.dll")
 		&& FileExist(A_ScriptDir "\Keywords_AHK_I.hes")
 		&& FileExist(A_ScriptDir "\Keywords_AHK_2.hes"))
 }
-; *********************************************************************************************************************************************************************
-SVS_GetAvailableLanguages(sSource) {
-
-_Query := sQuery
-sQuery := ""
-
-if (sSource) {
-	Loop % XML_Get("/source_languages/available")
-		{
-		_Name := XML_Get("/source_languages/language", A_Index)
-		if (_Query && _Query = _Name)
-			sQuery := XML_Get("/source_languages/file", A_Index)
-		_Languages .= _Name "|"
-		}
-} else {
-	LoopFiles %A_ScriptDir%\#Data\Languages\*.xml
-		{
-		_Name := XML_Get("/Translation/Language", 1, A_LoopFileLongPath)
-		if (_Query && _Query = _Name)
-			sQuery := A_LoopFileLongPath
-		_Languages .= _Name "|"
-		}
-	}
-
-return SubStr(_Languages, 1, StrLen(_Languages) - 1)
-}
-; **********************************************************************************************************************************************************************
-SVS_GetKeyName(sIni, sSection, sValue, sRemoveFlags) { ; REWRITE!!!
-
-FileRead sIni, %sIni%
-_BeginSection	:=	RegExMatch(sIni, "`aim)^[\s\t]*\Q[" sSection "]\E[\s\t]*$")
-if (!_BeginSection)
-	return
-_S := RegExMatch(sIni, "`aim)^[\s\t]*\[.*\][\s\t]*$", "", _BeginSection + StrLen(sSection) + 1)
-_EndSection		:=	( _S ? _S+1 : StrLen(sIni))
-
-_Found := RegExMatch(sIni, "`aim)^(.*)=\Q" sValue "\E\s*$", _Match, _BeginSection)
-_Name := _Found < _EndSection && _Found ? _Match1 : ""
-;MsgBox % "[" sSection "] > " sValue " < " _Name "==> " _Found " < " _EndSection " && " _Found " ? " _Match1 " : """"" "`n`n in `n`n " sIni
-
-if sRemoveFlags
-	_Name := RegExReplace(_Name, "`aim)^(.*)\[([-\+#\*]*)\]\s*$", "$1", "", 1)
-
-return _Name
-}
 ; **********************************************************************************************************************************************************************
 SVS_GetLVHeader(sSubTree) {
 
@@ -81,21 +36,15 @@ Loop nodes.length
 return SubStr(_Hdr, 1, StrLen(_Hdr) - 1)
 }
 ; **********************************************************************************************************************************************************************
-SVS_GetFilePath(sID) {
-return false ; for old code, new reads it from Data_Manager
-}
-; **********************************************************************************************************************************************************************
-SVS_GetResourceXML(sID) {
+GetResourceXML(sID) {
 
 LoopFiles %A_ScriptDir%\#Data\*.xml
 	{
-	_Name := XML_Get("/Resource/@Name", 1, A_LoopFileFullPath)
-	_Type := XML_Get("/Resource/@DataType", 1, A_LoopFileFullPath)
+	_Name := XML_Get("/resource/@name", 1, A_LoopFileFullPath)
+	_Type := XML_Get("/resource/@data-type", 1, A_LoopFileFullPath)
 		
-	if (_Name = Resources[sID].Name && _Type = Resources[sID].Type && _Name && _Type) {
-		;MsgBox % _Name "=" Data_Manager[sID].Name "&&" _Type "=" Data_Manager[sID].Type ">>" A_LoopFileLongPath
+	if (_Name = Resources[sID].Name && _Type = Resources[sID].Type && _Name && _Type)
 		return A_LoopFileFullPath
-		}
 	}
 return false
 }
@@ -130,7 +79,7 @@ SVS_SetSetting(sTree, sValue, sFile=0) {
 
 if (sFile = 0) {
 	sFile := A_ScriptDir "\Settings.xml"
-	sTree := "/Settings" sTree
+	sTree := "/settings" sTree
 	}
 doc := new XMLParser(sFile)
 return doc.SetText(sTree, sValue)
@@ -150,6 +99,10 @@ return _Hdr
 }
 
 AbsolutePath(path){
+
+if (!path || RegExMatch(path, "^\s*$"))
+	return path
+
 if ! DllCall("Shlwapi\PathIsRelative", "str", path)
 	return path
 	
