@@ -81,7 +81,14 @@ return
 MainWinClose:
 if A_IsCompiled
 	DllCall("AnimateWindow", "UInt", Gui.WindowHandle, "Int", 500, "UInt", 0x00010000|0x00080000)
-Project_Save()
+Project_Save2Obj()
+
+For id, resource in Resources
+	{
+	if (resource.type = "project")
+		Project_Save2File(id)	
+	}
+	
 SVS_SaveSettings()
 Gui 1: Destroy
 SCI_Finish(hSCIModule)
