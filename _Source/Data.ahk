@@ -183,19 +183,60 @@ return _ID
 }
 ; **********************************************************************************************************************************************************************
 Library_OpenResource(sID) {
+
+_Doc := Resources[sID].XML
+
+Gui 1: Listview, ResourceUserData_LV
+	LV_Delete()
+	GuiControl 1: -Redraw, ResourceUserData_LV
+	
+nodes := _Doc.Node(Resources[sID].Tree . "/metadata").childNodes
+Loop nodes.length
+	{
+	_Name	:=	nodes.item(A_Index - 1).attributes.getNamedItem("name").nodeValue
+	_Value	:=	nodes.item(A_Index - 1).text
+	_Flag	:=	nodes.item(A_Index - 1).attributes.getNamedItem("flag").nodeValue
+	
+	if InStr(_Flag, "-")
+		continue
+	
+	for property, _keyword in Keyword.lib
+		{
+		if (! Resources[sID].HasKey(property) && _Name = _keyword && _keyword != "Include" && _keyword != "Hide" && !InStr(_Flag, "#"))
+			Resources[sID][property] := _Value
+		}
+	LV_Add("", _Name, _Value)
+	}
+Loop 2
+	LV_ModifyCol(A_Index, "AutoHdr")
+
+_Text := XML_Translation("/KeyWords/Name", 1)	. ":`t`t"	. Resources[sID].Name			. "`n"
+		. Keyword.lib.Author					. ":`t`t"	. Resources[sID].Author			. "`n"
+		. Keyword.lib.License					. ":`t`t"	. Resources[sID].License		. "`n"
+		. Keyword.lib.Version					. ":`t`t"	. Resources[sID].Version
+
+GuiControl 1: , ResourceInfo, %_Text%
+
+Gui 1: ListView, ResourceProjects_LV
+	LV_Delete()
+	GuiControl 1: -Redraw, ResourceProjects_LV
+
+nodes := _Doc.Node(Resources[sID].Tree . "/projects").childNodes
+Loop nodes.length
+	LV_Add("", nodes.item(A_Index - 1).attributes.getNamedItem("name").nodeValue)
+
+GuiControl 1: +Redraw, ResourceUserData_LV
+GuiControl 1: +Redraw, ResourceProjects_LV
+
+If (!FileIsBinary(Resources[sID].File)){
+	FileRead _Temp, % Resources[sID].File
+	SCI_SetText(Gui.SCI1, _Temp)
+	}
+
 return
 }
 ; **********************************************************************************************************************************************************************
 File_OpenResource(sID) {
-; check for known data
-; if necessary, add new data
-
-; transfer data to hPanel3 + hPanel4
-
-; check panel property and show corresponding panel
-; if panel is 3, no check for binary
-; else: maybe using FileIsBinary() or similar
-; if path is unknown: only show 4
 
 _Doc := Resources[sID].XML
 
@@ -237,10 +278,7 @@ Gui 1: ListView, ResourceProjects_LV
 
 nodes := _Doc.Node(Resources[sID].Tree . "/projects").childNodes
 Loop nodes.length
-	{
 	LV_Add("", nodes.item(A_Index - 1).attributes.getNamedItem("name").nodeValue)
-	
-	}
 
 GuiControl 1: +Redraw, ResourceUserData_LV
 GuiControl 1: +Redraw, ResourceProjects_LV
