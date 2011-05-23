@@ -46,8 +46,8 @@ class XMLParser
 		return ErrorLevel
 		}
 		
-	HasNode(xpath, index){
-		return IsObject(this.GetNodes(xpath).item(index-1))
+	HasNode(xpath){
+		return IsObject(this.Node(xpath))
 		}
 		
 	SetText(xpath, value, index=1){
@@ -62,7 +62,7 @@ XML_Get(sTree, sIndex = 1, sFile = 0, sProperty = "text") {
 
 if (sFile = 0){
 	sFile := A_ScriptDir "\Settings.xml"
-	sTree := "/Settings" sTree
+	sTree := "/settings" sTree
 	}
 
 doc := new XMLParser(sFile)

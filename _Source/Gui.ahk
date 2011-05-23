@@ -148,3 +148,64 @@ Loop 1 {
 ; ******************************************************************************************************************************************************************************************
 Loop 6
 	WinHide % "ahk_id " Gui["Panel" A_Index + 2]
+	
+	
+	
+	
+/*
+Gui 1: Listview, Projects_LV
+	LV_SetImageList( SVS_IL(4, 2, 0), 1)
+Gui 1: Listview, Files_LV
+	LV_SetImageList( SVS_IL(3, 6, 0), 1)
+Gui 1: Listview, ResourceFile_LV
+	LV_SetImageList( SVS_IL(3, 6, 0), 1)
+; **********************************************************************************************************************************************************************
+Gui 1: Add,	Text,		x975	y560								hwndC_01,				% XML_Translation("Descriptions",	"Text.2.1")
+Gui 1: Add,	Combobox,	x1000	y585	w550			sort		hwndC_02	vStatDDL,	% XML_Translation("Misc.",			"Standard.Status")
+
+Gui 1: Add, Text,		x975	y630								hwndC_03,				% XML_Translation("Descriptions",	"Text.2.2")
+Gui 1: Add, Checkbox,	x1000	y655	w150	h30		0x1000		hwndC_04	vAHKB,		AHK (Basic)
+Gui 1: Add, Checkbox,	xp+200	yp		w150	h30		0x1000		hwndC_05	vAHKL,		AHK_L
+Gui 1: Add, Checkbox,	xp+200	yp		w150	h30		0x1000		hwndC_06	vAHKI,		IronAHK
+
+Gui 1: Add, Text,		x975	y700								hwndC_07,				% XML_Translation("Descriptions",	"Text.2.3")
+Gui 1: Add, Combobox,	x1000	y725	w550			sort		hwndC_08	vTypCombo,	% XML_Translation("Misc.",			"Standard.Type")
+
+Gui 1: Add, Text,		x975	y770								hwndC_09,				% XML_Translation("Descriptions",	"Text.2.4")
+Gui 1: Add, Edit,		x1000	y795	w550	r5					hwndC_10	vGoalEdit
+
+Gui 1: Add, Text,		x975	y930								hwndC_11,				% XML_Translation("Descriptions",	"Text.2.5")
+Gui 1: Add, Edit,		x1000	y955	w550	r1		ReadOnly	hwndC_12	vLModEdit
+
+; **********************************************************************************************************************************************************************
+Gui 1: Add, Text,		x75		y125			w200	0x1000	hwndC_01,						% XML_Translation("Descriptions",	"Text.6.1")
+Gui 1: Add, Edit,		x300	y125			w450	0x400	hwndC_02	vPath7zip,			% XML_Get("general",				"path.7zip")
+Gui 1: Add, Button,		x750	y125			w150			hwndC_03	gBrowse7zip,		% XML_Translation("Misc.",			"Command.Browse")
+
+Gui 1: Add, Text,		x75		y175			w200	0x1000	hwndC_04,						% XML_Translation("Descriptions",	"Text.6.2")
+Gui 1: Add, Edit,		x300	y175			w450	0x400	hwndC_05	vPathAHK_B_EXE,		% XML_Get("general",				"path.AHK.B")
+Gui 1: Add, Button,		x750	y175			w150			hwndC_06	gBrowseAHK_B_EXE,	% XML_Translation("Misc.",			"Command.Browse")
+
+Gui 1: Add, Text,		x75		y225			w200	0x1000	hwndC_07,						% XML_Translation("Descriptions",	"Text.6.3")
+Gui 1: Add, Edit,		x300	y225			w450	0x400	hwndC_08	vPathAHK_L_EXE,		% XML_Get("general",				"path.AHK.L")
+Gui 1: Add, Button,		x750	y225			w150			hwndC_09	gBrowseAHK_L_EXE,	% XML_Translation("Misc.",			"Command.Browse")
+
+Gui 1: Add, Text,		x75		y275			w200	0x1000	hwndC_10,						% XML_Translation("Descriptions",	"Text.6.4")
+Gui 1: Add, Edit,		x300	y275			w450	0x400	hwndC_11	vPathAHK_I_EXE,		% XML_Get("general",				"path.AHK.I")
+Gui 1: Add, Button,		x750	y275			w150			hwndC_12	gBrowseAHK_I_EXE,	% XML_Translation("Misc.",			"Command.Browse")
+
+Gui 1: Add, Text,		x75		y325			w200	0x1000	hwndC_13,						% XML_Translation("Descriptions",	"Text.6.5")
+Gui 1: Add, Edit,		x300	y325			w450	0x400	hwndC_14	vPathScripts,		% XML_Get("general",				"ScriptDir")
+Gui 1: Add, Button,		x750	y325			w150			hwndC_15	gBrowseScriptDir,	% XML_Translation("Misc.",			"Command.Browse")
+
+Gui 1: Add, Text,		x75		y425			w200	0x1000	hwndC_16,						% XML_Translation("Descriptions",	"Text.6.6")
+Gui 1: Add, DDL,		x300	y425			w450	0x1000	hwndC_17	vUserLanguage,		% SVS_GetAvailableLanguages(false)
+
+Gui 1: Add, Checkbox,	x75		y475	h30		w675	0x1000	hwndC_18	vEnableUpdates,		% XML_Translation("Descriptions",	"Text.6.7")
+Gui 1: Add, Button,		x75		y525			w675			hwndC_19					,	% XML_Translation("Descriptions",	"Text.6.8")
+
+Gui 1: Add, Text,		x1050	y175			w200	0x1000	hwndC_21,						% XML_Translation("Descriptions",	"Text.6.10")
+Gui 1: Add, Edit,		x1275	y175			w200	number	hwndC_22	
+
+GuiControl 1:	ChooseString,	UserLanguage,		% XML_Get("general",	"Language")
+*/
