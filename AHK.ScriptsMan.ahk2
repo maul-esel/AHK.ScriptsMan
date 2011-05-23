@@ -211,33 +211,39 @@ Resources[_ID]	:=	{"Name"			:	_Project
 return Project_Open(_ID)
 }
 ; **********************************************************************************************************************************************************************
-Project_Save() {
-
-Resources[Resources.ActiveID].Notes := SCI_GetText(Gui.SCI2)
-GuiControlGet, _Var, 1:, StatDDL
+Project_Save2Obj() {
 
 Resources[Resources.ActiveID].Notes := SCI_GetText(Gui.SCI2)
 
-; use XML && Tree properties
-; set all info with xpath()
-; save with xpath_save()
+GuiControlGet _Var, 1:, StatDDL
+Resources[Resources.ActiveID].Status := _Var
 
-return
+_Temp := "AHKB"
+LoopParse _Temp
+	{
+	GuiControlGet _Var, 1:, AHK%A_LoopField%
+	Resources[Resources.ActiveID]["AHK" A_LoopField ] := _Var
+	}
+	
+GuiControlGet _Var, 1:, TypCombo
+Resources[Resources.ActiveID].projecttype	:= _Var
 
-IniWrite	%StatDDL%,	%_File%,	properties,		Status
-IniWrite	%AHKB%,		%_File%,	properties,		AHK.B
-IniWrite	%AHKL%,		%_File%,	properties,		AHK.L
-IniWrite	%AHKI%,		%_File%,	properties,		AHK.I
-IniWrite	%TypCombo%,	%_File%,	properties,		Type
-;SVS_Convert2XML(GoalEdit)
-IniWrite	%GoalEdit%,	%_File%,	properties,		Purpose
-IniWrite	%A_Now%,	%_File%,	properties,		Last.Mod ;==========================================================================================================================
+GuiControlGet _Var, 1:, GoalEdit
+Resources[Resources.ActiveID].purpose		:= _Var
 
-;SVS_Convert2XML(_Text)
-IniWrite	%_Text%,	%_File%,	properties,		Notes
-
+Resources[Resources.ActiveID].lastmode		:=	A_Now
 return
 }
+; **********************************************************************************************************************************************************************
+Project_Save2File(id){
+
+
+For index, id in Resources[id].Subs
+	{
+	Project_Save2File(id)	
+	}
+}
+
 ; **********************************************************************************************************************************************************************
 Project_SetPriority() {
 
@@ -419,7 +425,7 @@ if (sID = 211) {
 	Project_AddUserData()
 	return -1
 } else if (sID = 223) {
-	Project_Save()
+	Project_Save2Obj()
 	return -1
 } else if (sID = 224) {
 	Project_SetPriority()
