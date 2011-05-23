@@ -1,4 +1,10 @@
 This program is intended to help AHK coders to manage their projects and related stuff.
 
 It is written in new AutoHotkey v2 version, which is still alpha.
-This is one reason why IT ISN'T YET FUNCTIONAL.
+This is just one reason why IT ISN'T YET FUNCTIONAL.
+
+External work used in this project:
+	- #Extern\Panel.ahk by majkinetor, part of the FORMS FRAMEWORK (http://www.autohotkey.com/forum/topic53317.html)
+	- #Extern\Toolbar.ahk also by majkinetor, also part of the FORMS FRAMEWORK
+	- _Source\debug.ahk >> A_LastError() by Bentschi (http://de.autohotkey.com/forum/viewtopic.php?t=8010)
+	
