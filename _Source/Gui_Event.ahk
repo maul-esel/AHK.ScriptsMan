@@ -7,12 +7,14 @@ if (A_GuiEvent = "RightClick") {
 else if (A_GuiEvent = "S") {
 
 	_id := A_EventInfo
+	if (Resources[Resources.ActiveID].type = "project")
+		Project_Save2Obj()
+	
 	if (Resources[_id].type = "project") {
 	
 		Loop 7
 			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
-		Project_Save2Obj()
 		Project_Open(_id) ;																																			[panel 5]
 		WinShow % "ahk_id " Gui.Panel5
 		Resources.ActiveID := _id
@@ -82,7 +84,9 @@ return
 MainWinClose:
 if A_IsCompiled
 	DllCall("AnimateWindow", "UInt", Gui.WindowHandle, "Int", 500, "UInt", 0x00010000|0x00080000)
-Project_Save2Obj()
+	
+if (Resources[Resources.ActiveID].type = "project")
+	Project_Save2Obj()
 
 For id, resource in Resources
 	{
@@ -146,7 +150,7 @@ For more information see the documentation.
 *****************************************************************************************************************************	
 
 'Scripts.View' wurde entwickelt von maul.esel.
-Copyright ?maul.esel, 2011
+Copyright (c) maul.esel, 2011
 Dazu habe ich sehr viel externe Software und externen Code genutzt.
 Darum danke ich:
 	(1) Chris Mallett für AutoHotkey (AHK), die beste Skript-Sprache.
