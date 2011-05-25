@@ -3,6 +3,7 @@ OnTreeAction:
 if (A_GuiEvent = "RightClick") {
 	On_TVContext(A_EventInfo)
 	}
+
 else if (A_GuiEvent = "S") {
 
 	_id := A_EventInfo
@@ -12,9 +13,8 @@ else if (A_GuiEvent = "S") {
 			SPanel_FadeOut(A_Index + 1)
 
 		Project_Open(_id) ;																																			[panel 5]
-		, SPanel_FadeIn(5)
-		, Resources.ActiveID := _id
-		ControlFocus,, % "ahk_id " Gui.SCI2
+		SPanel_FadeIn(5)
+		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "file"		&&	Resources[_id].context = "resource") {
 		
@@ -22,8 +22,8 @@ else if (A_GuiEvent = "S") {
 			SPanel_FadeOut(A_Index + 1)
 
 		File_OpenResource(_id) 	; zeigt panel mit info zu datei an (userdata, projects, default properties)	Möglichkeit: switch-to editing							[panel 4]
-		, SPanel_FadeIn(4)
-		, Resources.ActiveID := _id
+		SPanel_FadeIn(4)
+		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "library"	&&	Resources[_id].context = "resource") { ; ähnlich wie oben, inkl. editing-Möglichkeit	[panel 4]
 	
@@ -31,8 +31,8 @@ else if (A_GuiEvent = "S") {
 			SPanel_FadeOut(A_Index + 1)
 
 		Library_OpenResource(_id)
-		, SPanel_FadeIn(4)
-		, Resources.ActiveID := _id
+		SPanel_FadeIn(4)
+		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "file"		&&	Resources[_id].context = "project") { ; ähnlich zu file/resource, aber:			[panel 7]
 																								; + inkl. projects
@@ -44,7 +44,7 @@ else if (A_GuiEvent = "S") {
 
 		File_OpenProject(_id)
 		SPanel_FadeIn(7)
-		, Resources.ActiveID := _id
+		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "library"	&&	Resources[_id].context = "project"){ ; ähnlich wie oben								[panel 7]
 	
@@ -52,8 +52,8 @@ else if (A_GuiEvent = "S") {
 			SPanel_FadeOut(A_Index + 1)
 
 		Library_OpenProject(_id)
-		, SPanel_FadeIn(7)
-		, Resources.ActiveID := _id
+		SPanel_FadeIn(7)
+		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "resource_parent") {	;																							[panel 8]
 	
@@ -61,7 +61,7 @@ else if (A_GuiEvent = "S") {
 			SPanel_FadeOut(A_Index + 1)
 
 		SPanel_FadeIn(8)
-		, Resources.ActiveID := _id
+		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "task_parent"){ ; all tasks																						[panel 2]
 	
@@ -69,7 +69,7 @@ else if (A_GuiEvent = "S") {
 			SPanel_FadeOut(A_Index + 1)
 
 		SPanel_FadeIn(2)
-		, Resources.ActiveID := _id
+		Resources.ActiveID := _id
 		
 		}
 	;													Treeview																									[panel 1]
