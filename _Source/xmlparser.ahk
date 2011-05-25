@@ -53,8 +53,17 @@ class XMLParser
 	SetText(xpath, value, index=1){
 		if this.HasNode(xpath, index)
 			return this.doc.selectNodes(xpath).item(index-1).text := XML_Encode(value)
-		else
-			return this.Node(SubStr(xpath, 1, InStr(xpath, "/", 0, -1)-1)).appendChild(this.doc.createElement(SubStr(xpath, InStr(xpath, "/", 0, 0)+1, StrLen(xpath)))).text := XML_Encode(value)
+		
+		LoopParse xpath, /
+			{
+			if (A_Index = 1)
+				MsgBox % A_LoopField
+				;continue
+			if !this.HasNode(curr_path "/" A_LoopField)
+				this.Node(curr_path).appendChild(this.doc.createElement(A_LoopField))
+			curr_path .= "/" A_LoopField
+			}		
+		return this.Node(xpath).text := value
 		}
 	}
 
