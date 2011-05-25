@@ -12,6 +12,7 @@ else if (A_GuiEvent = "S") {
 		Loop 7
 			SPanel_FadeOut(A_Index + 1)
 
+		Project_Save2Obj()
 		Project_Open(_id) ;																																			[panel 5]
 		SPanel_FadeIn(5)
 		Resources.ActiveID := _id
