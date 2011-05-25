@@ -9,8 +9,16 @@ Author:													maul.esel
 #KeyHistory 0
 ListLines Off
 OnExit MainWinClose
-global XMLParser, Documents, Resources, Gui, Data_Manager, Keyword
+global XMLParser, Console, Documents, Resources, Gui, Data_Manager, Keyword, ConsoleMode
 global null := false
+
+if IsObject(Args){
+	for i, param in Args
+		if RegExMatch(param, "`aiU)^\w*='\w*'$"){
+			ConsoleMode := true, Console_Helper()
+			ExitApp
+			}
+	}
 
 if FilesAreMissing(){
 	Menu, Tray, NoIcon
@@ -316,6 +324,7 @@ return
 	#Include Toolbar.ahk
 	#Include TVM.ahk
 	#Include FileIsBinary.ahk
+	#Include Console.ahk
 	
 #Include <scintilla>
 
@@ -330,3 +339,4 @@ return
 	#Include Tab.ahk
 	#include Gui_Event.ahk
 	#include xmlparser.ahk
+	#Include Console_Helper.ahk
