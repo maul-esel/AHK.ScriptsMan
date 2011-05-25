@@ -327,6 +327,6 @@ return
 	#Include Task.ahk
 	#Include divers.ahk
 	#Include Debug.ahk
-	#Include Gui_Helper.ahk
+	#Include Tab.ahk
 	#include Gui_Event.ahk
 	#include xmlparser.ahk

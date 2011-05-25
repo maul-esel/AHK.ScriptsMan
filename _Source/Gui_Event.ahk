@@ -10,29 +10,31 @@ else if (A_GuiEvent = "S") {
 	if (Resources[_id].type = "project") {
 	
 		Loop 7
-			SPanel_FadeOut(A_Index + 1)
+			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
 		Project_Save2Obj()
 		Project_Open(_id) ;																																			[panel 5]
-		SPanel_FadeIn(5)
+		WinShow % "ahk_id " Gui.Panel5
 		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "file"		&&	Resources[_id].context = "resource") {
 		
 		Loop 7
-			SPanel_FadeOut(A_Index + 1)
+			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
 		File_OpenResource(_id) 	; zeigt panel mit info zu datei an (userdata, projects, default properties)	Möglichkeit: switch-to editing							[panel 4]
-		SPanel_FadeIn(4)
+		WinShow % "ahk_id " Gui.Panel3
+		WinShow % "ahk_id " Gui.Panel4
 		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "library"	&&	Resources[_id].context = "resource") { ; ähnlich wie oben, inkl. editing-Möglichkeit	[panel 4]
 	
 		Loop 7
-			SPanel_FadeOut(A_Index + 1)
+			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
 		Library_OpenResource(_id)
-		SPanel_FadeIn(4)
+		WinShow % "ahk_id " Gui.Panel3
+		WinShow % "ahk_id " Gui.Panel4
 		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "file"		&&	Resources[_id].context = "project") { ; ähnlich zu file/resource, aber:			[panel 7]
@@ -41,35 +43,35 @@ else if (A_GuiEvent = "S") {
 																								; + inkl. button: switch to file/resource
 																								; - ohne editing-Möglichkeit
 		Loop 7
-			SPanel_FadeOut(A_Index + 1)
+			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
 		File_OpenProject(_id)
-		SPanel_FadeIn(7)
+		WinShow % "ahk_id " Gui.Panel7
 		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "library"	&&	Resources[_id].context = "project"){ ; ähnlich wie oben								[panel 7]
 	
 		Loop 7
-			SPanel_FadeOut(A_Index + 1)
+			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
 		Library_OpenProject(_id)
-		SPanel_FadeIn(7)
+		WinShow % "ahk_id " Gui.Panel7
 		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "resource_parent") {	;																							[panel 8]
 	
 		Loop 7
-			SPanel_FadeOut(A_Index + 1)
+			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
-		SPanel_FadeIn(8)
+		WinShow % "ahk_id " Gui.Panel8
 		Resources.ActiveID := _id
 		
 	} else if (Resources[_id].type = "task_parent"){ ; all tasks																						[panel 2]
 	
 		Loop 7
-			SPanel_FadeOut(A_Index + 1)
+			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
-		SPanel_FadeIn(2)
+		WinShow % "ahk_id " Gui.Panel2
 		Resources.ActiveID := _id
 		
 		}
@@ -166,7 +168,7 @@ Weitere Informationen sind in der Dokumentation enthalten.
 	Gui 1: +OwnDialogs
 	InputBox _ID, Scripts.View, % XML_Translation("UserInterface/Dialogs/EditRessource")
 } else if (sID = 241) {
-	SPanel_MoveUp(3)
+	WinShow % "ahk_id " Gui["Panel" 3]
 } else if (sID = 281){ ; resources: copy id
 	Gui 1: Listview, Resource_LV
 	if !_Temp := LV_GetNext(0)
@@ -177,17 +179,6 @@ Weitere Informationen sind in der Dokumentation enthalten.
 return
 }
 
-SwitchPanel43:
-if (!Data_Manager.Panel3.visible){
-	SPanel_MoveUp(3)
-	SPanel_FadeOut(4)
-} else {
-	SPanel_FadeIn(4)
-	SPanel_MoveDown(3)
-	}
-DllCall("SetParent", "UInt", Data_Manager.Switcher1, "UInt", Data_Manager.Panel3.visible ? Data_Manager.Panel4.visible : Data_Manager.Panel3.visible)
-, Data_Manager.Panel3.visible := !Data_Manager.Panel3.visible
-return
 
 WM_Notify(wparam, lparam, msg, hwnd){
 global Data_Manager
