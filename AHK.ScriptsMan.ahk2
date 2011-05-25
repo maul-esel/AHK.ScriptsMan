@@ -1,6 +1,6 @@
 /**********************************************************************************************************************************************************************
 Name:													AHK.ScriptsMan beta 1
-AutoHotkey version:										v2
+AutoHotkey version:										AHK v2
 Language:												custom
 Author:													maul.esel
 ***********************************************************************************************************************************************************************
@@ -72,14 +72,14 @@ return
 ; **********************************************************************************************************************************************************************
 Resource_Package(ID){
 
-if not _7zip := XML_Get("Settings/paths/7zip")
+if not _7zip := XML_Get("/paths/7zip")
 	return -1
 	
-command := "cd /D """ A_ScriptDir "\#Temp\Package"""
-command := command " && ""%_7zip%"" a -ssw -t7z -r ""..\" SVS_F """ "".\" Resource[ID].Name """ && exit"
-command := """" command """"
+command := "cd /D `"" A_ScriptDir "\#Temp\Package`""
+command := command " && `"%_7zip%`" a -ssw -t7z -r `"..\" SVS_F "`" `".\" Resource[ID].Name "`" && exit"
+command := "`"" command "`""
 
-run %comspec% /k %command%, %A_ScriptDir%\#Temp
+run %A_ComSpec% /k %command%, %A_ScriptDir%\#Temp
 
 return
 }
