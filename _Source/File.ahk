@@ -56,7 +56,7 @@ File_OpenProject(sID) {
 return
 }
 ; **********************************************************************************************************************************************************************
-File_Add() {
+File_Create() {
 
 InputBox	_Name,	AHK.ScriptsMan,	% XML_Translation("/UserInterface/Dialogs/AddFile", 1),,,,,,,60
 if (ErrorLevel || !_Name)
