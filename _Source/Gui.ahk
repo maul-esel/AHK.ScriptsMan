@@ -19,17 +19,18 @@ ListOptions := "Backgroundwhite cblack Sort -LV0x10 -Multi gClickList altSubmit 
 ; ******************************************************************************************************************************************************************************************
 ; >>> TODO: detect screen width etc. --> relative Größen
 Data_Manager.Window					:=	{}
-Data_Manager.Window.Height		:=	1050
+Data_Manager.Window.Height			:=	1050
 Data_Manager.Window.Width			:=	1550
 Data_Manager.Window.ToolWidth		:=	Data_Manager.Window.Width / 20
-Data_Manager.Window.ToolHeight	:=	Data_Manager.Window.Height / 12
+Data_Manager.Window.ToolHeight		:=	Data_Manager.Window.Height / 12
 
 Loop 8 {
 	Gui["Panel" A_Index ]	:=	Panel_Add(Gui.WindowHandle
 										, A_Index = 1 ? 0 : 350
-										, 0
-										, A_Index = 1 ? 350 : Data_Manager.Window.Width - 350
-										, A_Index = 4 || A_Index = 6 ? 600 : Data_Manager.Window.Height)
+										, A_Index = 3 ? 650 : 0
+										, A_Index = 1 ? 350 : Data_Manager.Window.Width - 345
+										, A_Index = 4 || A_Index = 6 ? 600 : Data_Manager.Window.Height
+										, A_Index = 3 ? "border static" : "")
 	}
 ; ******************************************************************************************************************************************************************************************
 Gui.Toolbar1		:=	Toolbar_Add(Gui.Panel1,	"_EventHandler",	"flat border tooltips",		SVS_IL(3,	0,	1, 1), "y0 x25 h50 w" 300) ; >>> adjust + realize
@@ -49,14 +50,14 @@ Loop 8 {
 Gui, Add, Tab2, vSCIEditTab hwndC_01 x0 y100 w1200 h900 altSubmit, %A_Space%
 DllCall("SetParent", "UInt", Gui.Tab := C_01, "UInt", Gui.Panel3)
 ; ******************************************************************************************************************************************************************************************
-Gui.SCI1			:=	SCI_Add(Gui.Tab,	0,	25,	1200,	875)
-, Gui.SCI2			:=	SCI_Add(Gui.Panel5,	0,	560,	600,	430)
-, Gui.SCI3			:=	SCI_Add(Gui.Panel6,	0,	100,	600,	430)
+Gui.SCI1			:=	SCI_Add(Gui.Tab,	0,	25,		1200,	875)
+Gui.SCI2			:=	SCI_Add(Gui.Panel5,	0,	560,	600,	430)
+Gui.SCI3			:=	SCI_Add(Gui.Panel6,	0,	100,	600,	430)
 Documents.Active			:=	SCI_GetDocPointer(Gui.SCI1)
 Documents[Documents.Active]	:=	{}
-, Tab_SetLParam(Gui.Tab, 1, Documents.Active)
-, SCI_SetKeysUnicode(Gui.SCI1, true)
-, SCI_SetLexer(Gui.SCI1, 0)
+Tab_SetLParam(Gui.Tab, 1, Documents.Active)
+;SCI_SetKeysUnicode(Gui.SCI1, true)
+SCI_SetLexer(Gui.SCI1, 0)
 SCI_Colourise(Gui.SCI1, 0, -1)
 ;MsgBox % SCI_GetLexer(Gui.SCI1)
 /*_Temp=
@@ -148,7 +149,7 @@ Loop 1 {
 ; ******************************************************************************************************************************************************************************************
 Loop 6
 	WinHide % "ahk_id " Gui["Panel" A_Index + 2]
-	
+
 	
 	
 	
