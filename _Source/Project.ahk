@@ -21,6 +21,10 @@ GuiControlGet _Var, 1:, GoalEdit
 Resources[id].purpose		:= _Var
 
 Resources[id].lastmode		:=	A_Now
+
+if (XML_Get("/always_safe[1]") = "1")
+	return Project_Save2File(id)
+
 return
 }
 ; **********************************************************************************************************************************************************************
