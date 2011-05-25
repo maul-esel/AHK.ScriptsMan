@@ -17,4 +17,7 @@ External work used in this project:
 		
 	- _Source\debug.ahk >> A_LastError() by Bentschi
 		- http://de.autohotkey.com/forum/viewtopic.php?t=8010
+		
+	- #Extern\console.ahk adapted from CMD lib by ...
+		- http://de.autohotkey.com/forum/topic8517.html
 	
