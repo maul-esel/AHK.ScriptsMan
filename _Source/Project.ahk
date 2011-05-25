@@ -1,24 +1,26 @@
 Project_Save2Obj() {
 
-Resources[Resources.ActiveID].Notes := SCI_GetText(Gui.SCI2)
+MsgBox % id := Resources.ActiveID
+Resources[id].Notes := SCI_GetText(Gui.SCI2)
 
 GuiControlGet _Var, 1:, StatDDL
-Resources[Resources.ActiveID].Status := _Var
+Resources[id].Status := _Var
 
-_Temp := "AHKB"
+_Temp := "BLI2"
 LoopParse _Temp
 	{
 	GuiControlGet _Var, 1:, AHK%A_LoopField%
-	Resources[Resources.ActiveID]["AHK" A_LoopField ] := _Var
+	Resources[id]["AHK" A_LoopField ] := _Var
+	MsgBox %A_LoopField% -> %_Var%
 	}
 	
 GuiControlGet _Var, 1:, TypCombo
-Resources[Resources.ActiveID].projecttype	:= _Var
+Resources[id].projecttype	:= _Var
 
 GuiControlGet _Var, 1:, GoalEdit
-Resources[Resources.ActiveID].purpose		:= _Var
+Resources[id].purpose		:= _Var
 
-Resources[Resources.ActiveID].lastmode		:=	A_Now
+Resources[id].lastmode		:=	A_Now
 return
 }
 ; **********************************************************************************************************************************************************************
@@ -131,8 +133,6 @@ Project_Open(sID) {
 Gui 1: Default
 If (Resources.ActiveID = sID || !sID)
 	return -1
-
-Project_Save2Obj()
 
 Gui 1: Listview, ProjectFiles_LV
 	LV_Delete()
@@ -259,14 +259,14 @@ Loop 2
 
 if (! Resources[sID].HasKey("status"))
 	Resources[sID].status					:=	_Doc.Get(Resources[sID].Tree . "/properties/status")
-if (! Resources[sID].compatibility.HasKey("basic"))
-	Resources[sID].compatibility.basic		:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/basic")
-if (! Resources[sID].compatibility.HasKey("lexikos"))
-	Resources[sID].compatibility.lexikos	:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/lexikos")
-if (! Resources[sID].compatibility.HasKey("ironahk"))
-	Resources[sID].compatibility.ironahk	:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/iron-ahk")
-if (! Resources[sID].compatibility.HasKey("ahk2"))
-	Resources[sID].compatibility.ahk2		:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/ahk-2")
+if (! Resources[sID].compatibility.HasKey("AHKB"))
+	Resources[sID].compatibility.AHKB		:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/basic")
+if (! Resources[sID].compatibility.HasKey("AHKL"))
+	Resources[sID].compatibility.AHKL		:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/lexikos")
+if (! Resources[sID].compatibility.HasKey("AHKI"))
+	Resources[sID].compatibility.AHKI		:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/iron-ahk")
+if (! Resources[sID].compatibility.HasKey("AHK2"))
+	Resources[sID].compatibility.AHK2		:=	_Doc.Get(Resources[sID].Tree . "/properties/compatibility/ahk-2")
 if (! Resources[sID].HasKey("projecttype"))
 	Resources[sID].projecttype				:=	_Doc.Get(Resources[sID].Tree . "/properties/type")
 if (! Resources[sID].HasKey("purpose"))
@@ -278,10 +278,10 @@ if (! Resources[sID].HasKey("notes"))
 
 
 GuiControl 1:	Text, StatDDL,	% Resources[sID].status
-GuiControl 1:		, AHKB,		% Resources[sID].compatibility.basic ? 1 : 0
-GuiControl 1:		, AHKL,		% Resources[sID].compatibility.lexikos ? 1 : 0
-GuiControl 1:		, AHKI,		% Resources[sID].compatibility.ironahk ? 1 : 0
-GuiControl 1:		, AHK2,		% Resources[sID].compatibility.ahk2 ? 1 : 0
+GuiControl 1:		, AHKB,		% Resources[sID].compatibility.AHKB ? 1 : 0
+GuiControl 1:		, AHKL,		% Resources[sID].compatibility.AHKL ? 1 : 0
+GuiControl 1:		, AHKI,		% Resources[sID].compatibility.AHKI ? 1 : 0
+GuiControl 1:		, AHK2,		% Resources[sID].compatibility.AHK2 ? 1 : 0
 GuiControl 1:	Text, TypCombo,	% Resources[sID].projecttype
 GuiControl 1:		, GoalEdit,	% Resources[sID].purpose
 FormatTime _Temp, % Resources[sID].lastmod, LongDate
