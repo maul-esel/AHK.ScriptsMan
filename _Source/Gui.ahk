@@ -27,9 +27,9 @@ Data_Manager.Window.ToolHeight		:=	Data_Manager.Window.Height / 12
 Loop 8 {
 	Gui["Panel" A_Index ]	:=	Panel_Add(Gui.WindowHandle
 										, A_Index = 1 ? 0 : 350
-										, A_Index = 3 ? 650 : 0
+										, 0
 										, A_Index = 1 ? 350 : Data_Manager.Window.Width - 345
-										, A_Index = 4 || A_Index = 6 ? 600 : Data_Manager.Window.Height
+										, A_Index = 6 ? 600 : Data_Manager.Window.Height
 										, A_Index = 3 ? "border static" : "")
 	}
 ; ******************************************************************************************************************************************************************************************
@@ -56,7 +56,7 @@ Gui.SCI3			:=	SCI_Add(Gui.Panel6,	0,	100,	600,	430)
 Documents.Active			:=	SCI_GetDocPointer(Gui.SCI1)
 Documents[Documents.Active]	:=	{}
 Tab_SetLParam(Gui.Tab, 1, Documents.Active)
-;SCI_SetKeysUnicode(Gui.SCI1, true)
+SCI_SetKeysUnicode(Gui.SCI1, true)
 SCI_SetLexer(Gui.SCI1, 0)
 SCI_Colourise(Gui.SCI1, 0, -1)
 ;MsgBox % SCI_GetLexer(Gui.SCI1)
@@ -74,13 +74,13 @@ SCI_Colourise(Gui.SCI1, 0, -1)
 	)
 */
 Loop 3 {
-	SCI_LineNumbersBarWidth(	Gui["SCI" A_Index ],		(A_Index = 2 ? 0 : 25))
-	, SCI_SetIndentationGuides(	Gui["SCI" A_Index ],		2)
-	, SCI_SetWrapMode(			Gui["SCI" A_Index ],		1)
-	, SCI_SetWrapStartIndent(	Gui["SCI" A_Index ],		5)
-;>>> HE_AutoIndent(Gui["HiEdit" A_Index ].Handle,		true)
+	SCI_SetFont(				Gui["SCI" A_Index ], 		A_Index = 2 ? "Calibri" : "Courier New") ;!
+	SCI_LineNumbersBarWidth(	Gui["SCI" A_Index ],		A_Index = 2 ? 0 : 25)
+	SCI_SetIndentationGuides(	Gui["SCI" A_Index ],		2)
+	SCI_SetWrapMode(			Gui["SCI" A_Index ],		1)
+	SCI_SetWrapStartIndent(		Gui["SCI" A_Index ],		5)
+	SCI_SetKeysUnicode(			Gui["SCI" A_Index ],		true)
 ;>>> HE_SetColors(Gui["HiEdit" A_Index ].Handle,		_Temp,	1)
-;>>> HE_SetFont(Gui["HiEdit" A_Index ].Handle, 			(A_Index = 2 ? "s14, Calibri" : "s12 w600, Courier New"))
 	}
 ;>>> HE_SetKeyWordFile(A_ScriptDir "\#Data\KeywordsAHKB.hes")
 ; ******************************************************************************************************************************************************************************************
@@ -88,11 +88,11 @@ Loop 3 {
 _Temp := SVS_IL(5, 8, 0)
 Gui 1: Add,	Treeview,	Backgroundwhite cblack -0x4 -0x1 0x20 altSubmit imagelist%_Temp% x25 y50 w300 h950 hwndC_01 vResourceTree gOnTreeAction
 Gui.Treeview := {}
-, Gui.Treeview.Handle := C_01
-, Gui.Treeview.ImageList := _Temp
-, DllCall("SetParent",		"UInt", Gui.Treeview.Handle, "UInt", Gui.Panel1)
-, DllCall("SetClassLong",	"UInt", Gui.Treeview.Handle, "UInt", -12, "UInt", DllCall("LoadCursorW", "UInt", 0, "UInt", 32649))
-, TV_SetStateImageList(Gui.Treeview.Handle, Gui.Treeview.StateIL := SVS_IL(4, 4, 0))
+Gui.Treeview.Handle := C_01
+Gui.Treeview.ImageList := _Temp
+DllCall("SetParent",		"UInt", Gui.Treeview.Handle, "UInt", Gui.Panel1)
+DllCall("SetClassLong",	"UInt", Gui.Treeview.Handle, "UInt", -12, "UInt", DllCall("LoadCursorW", "UInt", 0, "UInt", 32649))
+TV_SetStateImageList(Gui.Treeview.Handle, Gui.Treeview.StateIL := SVS_IL(4, 4, 0))
 ; ******************************************************************************************************************************************************************************************
 ; controls on Panel2
 Gui	Add,	Listview,	x0		y50	w1200	h950	%ListOptions% hwndC_01 vCommonTasks_LV,			% SVS_GetLVHeader("Tasks")
@@ -105,6 +105,7 @@ Gui 1: Add,	ListView,	x0		y425	w1200	h175	%ListOptions%	hwndC_03 vResourceProjec
 Loop 3 {
 	Nr := (A_Index < 10 ? 0 . A_Index : A_Index)
 	DllCall("SetParent", "UInt", C_%Nr%, "UInt", Gui.Panel4)
+	VarSetCapacity(C_%Nr%, 0)
 	}
 ; ******************************************************************************************************************************************************************************************
 ; controls on Panel5
@@ -132,8 +133,8 @@ Gui 1: Add, Edit,		x675	y955	w525	r1		ReadOnly	hwndC_16	vLModEdit
 
 Loop 16 {
 	Nr := (A_Index < 10 ? 0 . A_Index : A_Index)
-	, DllCall("SetParent", "UInt", C_%Nr%, "UInt", Gui.Panel5)
-	, VarSetCapacity(C_%Nr%, 0)
+	DllCall("SetParent", "UInt", C_%Nr%, "UInt", Gui.Panel5)
+	VarSetCapacity(C_%Nr%, 0)
 	}
 ; ******************************************************************************************************************************************************************************************
 ; controls auf Panel6
@@ -143,8 +144,8 @@ DllCall("SetParent", "UInt", C_01, "UInt", Gui.Panel6)
 Gui 1: Add,	ListView,	x0 y50 w1200 h950 %ListOptions% hwndC_01 vResource_LV, % SVS_GetLVHeader("Resources")
 Loop 1 {
 	Nr := (A_Index < 10 ? 0 . A_Index : A_Index)
-	, DllCall("SetParent", "UInt", C_%Nr%, "UInt", Gui.Panel8)
-	, VarSetCapacity(C_%Nr%, 0)
+	DllCall("SetParent", "UInt", C_%Nr%, "UInt", Gui.Panel8)
+	VarSetCapacity(C_%Nr%, 0)
 	}
 ; ******************************************************************************************************************************************************************************************
 Loop 6

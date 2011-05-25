@@ -23,7 +23,6 @@ else if (A_GuiEvent = "S") {
 			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
 		File_OpenResource(_id) 	; zeigt panel mit info zu datei an (userdata, projects, default properties)	Möglichkeit: switch-to editing							[panel 4]
-		WinShow % "ahk_id " Gui.Panel3
 		WinShow % "ahk_id " Gui.Panel4
 		Resources.ActiveID := _id
 		
@@ -33,7 +32,6 @@ else if (A_GuiEvent = "S") {
 			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
 		Library_OpenResource(_id)
-		WinShow % "ahk_id " Gui.Panel3
 		WinShow % "ahk_id " Gui.Panel4
 		Resources.ActiveID := _id
 		
