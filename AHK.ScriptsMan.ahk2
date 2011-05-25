@@ -58,6 +58,7 @@ Keyword	:=	{}
 		Keyword.lib.Author			:=	XML_Translation("/KeyWords/Author")			?	XML_Translation("/KeyWords/Author")			:	"author"
 		Keyword.lib.License			:=	XML_Translation("/KeyWords/License")		?	XML_Translation("/KeyWords/License")		:	"license"
 		Keyword.lib.Version			:=	XML_Translation("/KeyWords/Version")		?	XML_Translation("/KeyWords/Version")		:	"version"
+		Keyword.lib.Path			:=	XML_Translation("/KeyWords/Path")			?	XML_Translation("/KeyWords/Path")			:	"path"
 
 Documents	:=	{}
 Resources	:=	{}
@@ -314,6 +315,7 @@ return
 	#Include Panel.ahk
 	#Include Toolbar.ahk
 	#Include TVM.ahk
+	#Include FileIsBinary.ahk
 	
 #Include <scintilla>
 
