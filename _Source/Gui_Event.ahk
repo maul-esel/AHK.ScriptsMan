@@ -90,7 +90,7 @@ if (Resources[Resources.ActiveID].type = "project")
 
 For id, resource in Resources
 	{
-	if (resource.type = "project")
+	if (resource.type = "project" && resource.context = "toplevel")
 		Project_Save2File(id)	
 	}
 	
