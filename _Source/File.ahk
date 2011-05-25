@@ -45,10 +45,6 @@ Loop nodes.length
 GuiControl 1: +Redraw, ResourceUserData_LV
 GuiControl 1: +Redraw, ResourceProjects_LV
 
-If (FileExist(Resources[sID].Path) && Resources[sID].Path && !FileIsBinary(Resources[sID].Path)){
-	FileRead _Temp, % Resources[sID].Path
-	SCI_SetText(Gui.SCI1, _Temp)
-	}
 return
 }
 ; **********************************************************************************************************************************************************************
