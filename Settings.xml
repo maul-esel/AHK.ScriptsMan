@@ -11,7 +11,7 @@
 	</paths>
 	<language>English</language>
 	<updates enable="0"></updates>
-	<always_safe>1</alwaysSafe>
+	<always_safe>1</always_safe>
 	
 	<source_languages>
 		<language name="AutoHotkey">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_B.hes</language>
