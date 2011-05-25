@@ -14,10 +14,6 @@
 	<always_safe>1</always_safe>
 	
 	<source_languages>
-		<language name="AutoHotkey">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_B.hes</language>
-		<language name="AutoHotkey_L">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_L.hes</language>
-		<language name="IronAHK">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_I.hes</language>
-		<language name="AutoHotkey2">C:\AutoHotkey\AHK.ScriptsMan\Keywords_AHK_2.hes</language>
 	</source_languages>
 	
 	<tasks>
