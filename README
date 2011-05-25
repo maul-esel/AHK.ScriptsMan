@@ -12,7 +12,7 @@ External work used in this project:
 	- #Extern\Toolbar.ahk also by majkinetor
 		- also part of the FORMS FRAMEWORK
 		
-	- #Extern\FileIsBinary.ahk by Tuncay
+	- #Extern\FileIsBinary.ahk by Lexikos
 		- http://www.autohotkey.com/forum/topic52681.html
 		
 	- _Source\debug.ahk >> A_LastError() by Bentschi
