@@ -12,12 +12,10 @@ OnExit MainWinClose
 global XMLParser, Console, Documents, Resources, Gui, Data_Manager, Keyword, ConsoleMode
 global null := false
 
-if IsObject(Args){
-	for i, param in Args
-		if RegExMatch(param, "`aiU)^\w*='\w*'$"){
-			ConsoleMode := true, Console_Helper()
-			ExitApp
-			}
+if Args{
+	ConsoleMode := true, Console_Helper()
+	sleep 10000
+	ExitApp
 	}
 
 if FilesAreMissing(){
@@ -325,6 +323,7 @@ return
 	#Include TVM.ahk
 	#Include FileIsBinary.ahk
 	#Include Console.ahk
+	#Include process.ahk
 	
 #Include <scintilla>
 
