@@ -10,8 +10,7 @@ _Temp := "BLI2"
 LoopParse _Temp
 	{
 	GuiControlGet _Var, 1:, AHK%A_LoopField%
-	Resources[id]["AHK" A_LoopField ] := _Var
-	MsgBox %A_LoopField% -> %_Var%
+	Resources[id].compatibility["AHK" A_LoopField ] := _Var
 	}
 	
 GuiControlGet _Var, 1:, TypCombo
