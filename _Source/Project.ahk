@@ -1,6 +1,6 @@
 Project_Save2Obj() {
 
-MsgBox % id := Resources.ActiveID
+id := Resources.ActiveID
 Resources[id].Notes := SCI_GetText(Gui.SCI2)
 
 GuiControlGet _Var, 1:, StatDDL
