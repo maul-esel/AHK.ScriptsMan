@@ -60,6 +60,7 @@ class cProject
 	; **********************************************************************************************************************************************************************
 	List(sDoc, sTree, sPID, sFile) {
 
+	Gui 1: Default
 	Gui 1: Treeview, ResourceTree
 	Gui 1: ListView, Resource_LV
 
@@ -78,18 +79,16 @@ class cProject
 							, "AHK2"	:	sDoc.Get(sTree . "/properties/compatibility/ahk-2")}
 	this.File			:=	sFile
 	
+	Resources.List[this.Name]	:=	this.ID
+	Resources[this.ID]			:=	this
+	
 	TV_SetStateImage(Gui.Treeview.Handle, this.ID, this.Priority = 3 ? 3 : (this.Priority = 2 ? 2 : 1))
-	Resources.List[this.Name] := this.ID
 	LV_Add("", this.Name, "project", this.ID)
 
 	Gui 1: Listview, CommonTasks_LV
-	this.Tasks	:=	{}
 	_list		:=	this.XML.GetNodes(this.Tree . "/tasks/task")
-	Loop _list.length {
-		LV_Add("", _Name := _list.item(A_Index - 1).attributes.getNamedItem("name").nodeValue, _list.item(A_Index - 1).text, this.ParentTree)
-		this.Tasks[ A_Index ] := {"Name"		: _Name
-								, "Description" : _list.item(A_Index - 1).text}
-		}
+	Loop _list.length
+		LV_Add("", _list.item(A_Index - 1).attributes.getNamedItem("name").nodeValue, _list.item(A_Index - 1).text, this.ParentTree)
 
 	this.Files	:=	{}
 	_list		:=	this.XML.GetNodes(this.Tree . "/files/file")
@@ -135,7 +134,6 @@ class cProject
 		this.Subs[ A_Index ]	:=	_sub.ID
 		}
 	
-	Resources[this.ID]	:=	this
 	return this.ID
 	}
 	; **********************************************************************************************************************************************************************
