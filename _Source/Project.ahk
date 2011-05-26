@@ -86,7 +86,7 @@ class cProject
 	this.Tasks	:=	{}
 	_list		:=	this.XML.GetNodes(this.Tree . "/tasks/task")
 	Loop _list.length {
-		LV_Add("", _Name := _list.item(A_Index - 1).attributes.getNamedItem("name").nodeValue, this.ParentTree)
+		LV_Add("", _Name := _list.item(A_Index - 1).attributes.getNamedItem("name").nodeValue, _list.item(A_Index - 1).text, this.ParentTree)
 		this.Tasks[ A_Index ] := {"Name"		: _Name
 								, "Description" : _list.item(A_Index - 1).text}
 		}

@@ -24,6 +24,7 @@
 		
 			<Tasks>
 				<Header>Aufgabe</Header>
+				<Header>Beschreibung</Header>
 				<Header>Projekt</Header>
 				<MenuItem>erledigt</MenuItem>
 				<MenuItem>nach oben</MenuItem>

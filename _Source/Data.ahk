@@ -16,13 +16,9 @@ Gui 1: Listview, Resource_LV
 ; create tasks tvitem && add public tasks to the list
 Gui 1: Listview, CommonTasks_LV
 Resources[ TV_Add("tasks", 0, "Icon1") ] := {"type" : "task_parent"}
-tasks := (new XMLParser(A_ScriptDir "\Settings.xml")).GetNodes("/settings/tasks/task")
-Loop tasks.length {
-	_Temp := tasks.item(A_Index - 1).text
-	if not (_Temp)
-		break
-	LV_Add("", _Temp, XML_Translation("/UserInterface/MainGui/Tasks/Info"))
-	}
+_list := (new XMLParser(A_ScriptDir "\Settings.xml")).GetNodes("/settings/tasks/task")
+Loop _list.length
+	LV_Add("", _list.item(A_Index - 1).attributes.getNamedItem("name").nodeValue, _list.item(A_Index - 1).text, XML_Translation("/UserInterface/MainGui/Tasks/Info"))
 
 ; add resources tvitem
 _ID := TV_Add("resources", 0, "icon2 expand") ; icon: resource_parent

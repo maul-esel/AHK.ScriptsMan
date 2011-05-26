@@ -24,6 +24,7 @@
 		
 			<Tasks>
 				<Header>task</Header>
+				<Header>description</Header>
 				<Header>project</Header>
 				<MenuItem>mark as done</MenuItem>
 				<MenuItem>move up</MenuItem>
