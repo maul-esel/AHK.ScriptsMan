@@ -20,24 +20,32 @@ class cProject
 	GuiControlGet _Var, 1:, GoalEdit
 	this.purpose		:= _Var
 
-	this.lastmode		:=	A_Now
+	this.lastmod		:=	A_Now
 
 	if (XML_Get("/always_safe") = "1")
-		return this.Save2File()
+		return this.Save2File(false)
 
 	return
 	}
 	; **********************************************************************************************************************************************************************
 	Save2File(recurse = true){
 
-	this.XML.SetText(this.Tree "/properties/notes", this.Notes)
+	this.XML.SetText(this.Tree . "/properties/priority",				this.Priority)
+	this.XML.SetText(this.Tree . "/properties/status",					this.Status)
+	this.XML.SetText(this.Tree . "/properties/compatibility/basic",		this.compatibility.AHKB)
+	this.XML.SetText(this.Tree . "/properties/compatibility/lexikos",	this.compatibility.AHKL)
+	this.XML.SetText(this.Tree . "/properties/compatibility/iron-ahk",	this.compatibility.AHKI)
+	this.XML.SetText(this.Tree . "/properties/compatibility/ahk-2",		this.compatibility.AHK2)
+	this.XML.SetText(this.Tree . "/properties/type",					this.projecttype)
+	this.XML.SetText(this.Tree . "/properties/purpose",					this.Purpose)
+	this.XML.SetText(this.Tree . "/properties/last-mod",				this.lastmod)
+	this.XML.SetText(this.Tree . "/properties/notes",					this.Notes)
 
 	this.XML.Save(this.File)
 
 	if (recurse)
-		For index, id in this.Subs
+		For i, id in this.Subs
 			Resources[id].Save2File()
-
 	return
 	}
 	; **********************************************************************************************************************************************************************
@@ -90,7 +98,7 @@ class cProject
 	Loop _list.length
 		LV_Add("", _list.item(A_Index - 1).attributes.getNamedItem("name").nodeValue, _list.item(A_Index - 1).text, this.ParentTree)
 
-	this.Files	:=	{}
+	this.Files	:=	[]
 	_list		:=	this.XML.GetNodes(this.Tree . "/files/file")
 	Loop _list.length{
 		
@@ -107,7 +115,7 @@ class cProject
 		this.Files[ A_Index ]	:= _file.ID
 		}
 
-	this.Libraries	:=	{}
+	this.Libraries	:=	[]
 	_list			:=	this.XML.GetNodes(this.Tree . "/libraries/lib")
 	Loop _list.length{
 		
