@@ -60,21 +60,6 @@ if sDef
 return IL
 }
 ; **********************************************************************************************************************************************************************
-SVS_SaveSettings() {
-global Path7zip, PathAHK_B_EXE, PathAHK_L_EXE, PathAHK_I_EXE, PathScripts, EnableUpdates, UserLanguage
-Gui 1: Submit, NoHide
-return ; wrong variables
-
-SVS_SetSetting("paths/7zip",		Path7zip)
-SVS_SetSetting("path/AHK/Basic",	PathAHK_B_EXE)
-SVS_SetSetting("path/AHK/Lexikos",	PathAHK_L_EXE)
-SVS_SetSetting("path/AHK/IronAHK",	PathAHK_I_EXE)
-SVS_SetSetting("path/ScriptDir",	PathScripts)
-SVS_SetSetting("language",			UserLanguage)
-return
-
-}
-; **********************************************************************************************************************************************************************
 SVS_SetSetting(sTree, sValue, sFile=0) {
 
 if (sFile = 0) {
