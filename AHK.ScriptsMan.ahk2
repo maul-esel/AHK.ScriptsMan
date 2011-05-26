@@ -9,15 +9,9 @@ Author:													maul.esel
 #KeyHistory 0
 ListLines Off
 OnExit MainWinClose
-global XMLParser, Console, cFile, cLibrary, cProject ; classes
-global Documents, Resources, Gui, Data_Manager, Keyword, ConsoleMode ; other
+global XMLParser, cFile, cLibrary, cProject ; classes
+global Documents, Resources, Gui, Data_Manager, Keyword ; other
 global null := false
-
-if Args{
-	ConsoleMode := true, Console_Helper()
-	sleep 10000
-	ExitApp
-	}
 
 if FilesAreMissing(){
 	Menu, Tray, NoIcon
@@ -319,8 +313,6 @@ return
 	#Include Toolbar.ahk
 	#Include TVM.ahk
 	#Include FileIsBinary.ahk
-	#Include Console.ahk
-	#Include process.ahk
 	
 #Include <scintilla>
 
@@ -335,4 +327,3 @@ return
 	#Include Tab.ahk
 	#include Gui_Event.ahk
 	#include xmlparser.ahk
-	#Include Console_Helper.ahk
