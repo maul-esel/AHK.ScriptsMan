@@ -9,7 +9,8 @@ Author:													maul.esel
 #KeyHistory 0
 ListLines Off
 OnExit MainWinClose
-global XMLParser, Console, Documents, Resources, Gui, Data_Manager, Keyword, ConsoleMode
+global XMLParser, Console, cFile, cLibrary, cProject ; classes
+global Documents, Resources, Gui, Data_Manager, Keyword, ConsoleMode ; other
 global null := false
 
 if Args{
@@ -102,13 +103,13 @@ if (sID = 211) {
 } else if (sID = 221) {
 	Gui 2: Show, w1250 h800, AHK.ScriptsMan - resources
 } else if (sID = 222) {
-	Project_AddUserData()
+	Resources[sID].AddUserData()
 	return -1
 } else if (sID = 223) {
-	Project_Save2Obj()
+	Resources[sID].Save2Obj()
 	return -1
 } else if (sID = 224) {
-	Project_SetPriority()
+	Resources[sID].SetPriority()
 	return -1
 } else if (sID = 231) {
 	;SCI_SaveFile()
@@ -161,11 +162,7 @@ if (sID = 211) {
 } else if (sID = 271) {
 	
 } else if (sID = 111) {
-	Gui 1: Default
-	Gui 1: Listview, Projects_LV
-	_Row := LV_GetNext()
-	LV_GetText(_Project, _Row, 1)
-	Project_Open(_Project)
+	Resources[sID].Open()
 	UI_Event_Handler(0, "click", "", 0, 312)
 } else if (sID = 112) {
 	return -1

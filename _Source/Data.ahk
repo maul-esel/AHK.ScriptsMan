@@ -39,49 +39,34 @@ LoopFiles %A_ScriptDir%\#Data\*.xml
 	
 	if (_ResType = "project"){
 	
-		lid := Project_List(doc, "/resource", 0, A_LoopFileFullPath)
+		_project := new cProject
+		lid := _project.List(doc, "/resource", 0, A_LoopFileFullPath)
 		
-	} else if (_ResType = "file"){
+	} else if (_ResType = "file" || _ResType = "library"){
 
+		if (_ResType = "file")
+			_obj	:=	new cFile
+		else
+			_obj	:=	new cLibrary
+		
 		Gui 1: Listview, Resource_LV
 				
-		_Name := doc.Get("/resource/@name")
-		_RID := TV_Add(_Name, _ID, "icon4") ; icon: resource-file
+		_obj.Name		:=	doc.Get("/resource/@name")
+		_obj.ID			:=	TV_Add(_obj.Name, _ID, _ResType = "file" ? "icon4" : "icon5") ; icon: resource-file | resource-lib
+		_obj.Type		:=	_ResType = "file" ? "file" : "library"
+		_obj.context	:=	"resource"
+		_obj.ParentID	:=	0
+		_obj.XML		:=	doc
+		_obj.Tree		:=	"/resource"
+		_obj.File		:=	A_LoopFileFullPath
 	
-		Resources[_RID]	:=	{"name"		:	_Name
-								, "type"		:	"file"
-								, "context"		:	"resource"
-								, "parentID"	:	0
-								, "XML"			:	doc
-								, "tree"		:	"/resource"
-								, "file"		:	A_LoopFileFullPath}
-	
-		Resources[_ID].Files["file" A_Index ] := _RID
-		LV_Add("", _Name, "file", _RID)
-		Resources.List[_Name] := _RID
+		LV_Add("", _obj.Name, _obj.Type, _obj.ID)
 		
-	} else if (_ResType = "library"){
-	
-		Gui 1: Listview, Resource_LV
+		Resources.List[_obj.Name]		:=	_obj.ID
+		Resources[_ID][_ResType = "file" ? "Files" : "Libraries"][ A_Index ] :=	_obj.ID
+		Resources[_obj.ID]				:=	_obj
 
-		_Name := doc.Get("/resource/@name")
-		_RID := TV_Add(_Name, _ID, "icon5") ; icon: resource-lib
-	
-		Resources[_RID]	:=	{"name"		:	_Name
-								, "type"		:	"library"
-								, "context"		:	"resource"
-								, "parentID"	:	0
-								, "XML"			:	doc
-								, "tree"		:	"/resource"
-								, "file"		:	A_LoopFileFullPath}
-	
-		Resources[_ID].Libraries["library" A_Index ] := _RID
-		LV_Add("", _Name, "library", _RID)
-		Resources.List[_Name] := _RID
-		
-		}
-	if not _ResType
-		{
+	} else if !_ResType {
 		err := doc.doc.ParseError
 		Error(A_ThisFunc "()", "-0x0002", "XML parsing error", "A parsing error was detected in `"" A_LoopFileFullPath "`"`nxml error code: " err.errorCode
 									. "`nxml error reason: " err.Reason "`nxml error line: " err.Line "`nxml code: " err.srcText, "The file will be ignored.")

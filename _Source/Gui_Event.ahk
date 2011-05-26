@@ -8,36 +8,27 @@ else if (A_GuiEvent = "S") {
 
 	_id := A_EventInfo
 	if (Resources[Resources.ActiveID].type = "project")
-		Project_Save2Obj()
+		Resources[Resources.ActiveID].Save2Obj()
 	
 	if (Resources[_id].type = "project") {
 	
 		Loop 7
 			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
-		Project_Open(_id) ;																																			[panel 5]
+		Resources[_id].Open() ;																																			[panel 5]
 		WinShow % "ahk_id " Gui.Panel5
 		Resources.ActiveID := _id
 		
-	} else if (Resources[_id].type = "file"		&&	Resources[_id].context = "resource") {
+	} else if ((Resources[_id].type = "file"	||	Resources[_id].type = "library")	&&	Resources[_id].context = "resource") {
 		
 		Loop 7
 			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
-		File_OpenResource(_id) 	; zeigt panel mit info zu datei an (userdata, projects, default properties)	Möglichkeit: switch-to editing							[panel 4]
+		Resources[_id].OpenResource() 	; zeigt panel mit info zu datei an (userdata, projects, default properties)	Möglichkeit: switch-to editing							[panel 4]
 		WinShow % "ahk_id " Gui.Panel4
 		Resources.ActiveID := _id
 		
-	} else if (Resources[_id].type = "library"	&&	Resources[_id].context = "resource") { ; ähnlich wie oben, inkl. editing-Möglichkeit	[panel 4]
-	
-		Loop 7
-			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
-
-		Library_OpenResource(_id)
-		WinShow % "ahk_id " Gui.Panel4
-		Resources.ActiveID := _id
-		
-	} else if (Resources[_id].type = "file"		&&	Resources[_id].context = "project") { ; ähnlich zu file/resource, aber:			[panel 7]
+	} else if ((Resources[_id].type = "file"	||	Resources[_id].type = "library")	&&	Resources[_id].context = "project") { ; ähnlich zu file/resource, aber:			[panel 7]
 																								; + inkl. projects
 																								; + inkl. private user data
 																								; + inkl. button: switch to file/resource
@@ -45,16 +36,7 @@ else if (A_GuiEvent = "S") {
 		Loop 7
 			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
 
-		File_OpenProject(_id)
-		WinShow % "ahk_id " Gui.Panel7
-		Resources.ActiveID := _id
-		
-	} else if (Resources[_id].type = "library"	&&	Resources[_id].context = "project"){ ; ähnlich wie oben								[panel 7]
-	
-		Loop 7
-			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
-
-		Library_OpenProject(_id)
+		Resources[_id].OpenProject(_id)
 		WinShow % "ahk_id " Gui.Panel7
 		Resources.ActiveID := _id
 		
@@ -86,12 +68,12 @@ if A_IsCompiled
 	DllCall("AnimateWindow", "UInt", Gui.WindowHandle, "Int", 500, "UInt", 0x00010000|0x00080000)
 	
 if (Resources[Resources.ActiveID].type = "project")
-	Project_Save2Obj()
+	Resources[Resources.ActiveID].Save2Obj()
 
 For id, resource in Resources
 	{
-	if (resource.type = "project" && resource.context = "toplevel")
-		Project_Save2File(id)	
+	if (resource.type = "project" && resource.context = "resource")
+		resource.Save2File()	
 	}
 	
 SVS_SaveSettings()

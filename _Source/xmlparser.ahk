@@ -16,16 +16,16 @@ class XMLParser
 		return this.doc[property] := value
 		}
 */		
-	Load(file){
-		return this.doc.Load(file)
+	Load(_file){
+		return this.doc.Load(_file)
 		}
 		
 	LoadXML(data){
 		return this.doc.LoadXML(data)
 		}
 		
-	Get(xpath, type="text"){
-		return XML_Decode(this.doc.selectSingleNode(xpath)[type])
+	Get(xpath, i=1, type="text"){
+		return XML_Decode(this.GetNodes(xpath).item(i-1)[type])
 		}
 		
 	Node(xpath){
