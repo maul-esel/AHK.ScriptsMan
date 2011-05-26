@@ -1,10 +1,8 @@
 Menu Tray, NoStandard
-Menu Tray, Add, % XML_Translation("/UserInterface/TrayMenu/Item", 1), HideWins
+Menu Tray, Add, % XML_Translation("/UserInterface/TrayMenu/Item", 1), OpenHelp
 Menu Tray, Add
-Menu Tray, Add, % XML_Translation("/UserInterface/TrayMenu/Item", 2), OpenHelp
-Menu Tray, Add
-Menu Tray, Add, % XML_Translation("/UserInterface/TrayMenu/Item", 3), Restart
-Menu Tray, Add, % XML_Translation("/UserInterface/TrayMenu/Item", 4), MainWinClose
+Menu Tray, Add, % XML_Translation("/UserInterface/TrayMenu/Item", 2), Restart
+Menu Tray, Add, % XML_Translation("/UserInterface/TrayMenu/Item", 3), MainWinClose
 Menu Tray, Tip, Scripts.View`n----------------------------------`nfree`, open-source`, multilingual`nand customizable software
 
 Gui 1: +OwnDialogs +MaximizeBox +LabelMainWin

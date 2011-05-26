@@ -3,7 +3,6 @@
 	<UserInterface>
 	
 		<TrayMenu>
-			<Item>show / hide</Item>
 			<Item>help</Item>
 			<Item>restart</Item>
 			<Item>exit</Item>

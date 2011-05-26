@@ -3,7 +3,6 @@
 	<UserInterface>
 	
 		<TrayMenu>
-			<Item>Anzeigen / Verstecken</Item>
 			<Item>Hilfe</Item>
 			<Item>Neustart</Item>
 			<Item>Beenden</Item>
