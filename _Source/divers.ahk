@@ -20,11 +20,7 @@ return
 ; **********************************************************************************************************************************************************************
 FilesAreMissing() {
 return !(FileExist(A_ScriptDir "\AHK.ScriptsMan.dll") 
-		&& FileExist(A_ScriptDir "\Settings.xml")
-		&& FileExist(A_ScriptDir "\Keywords_AHK_B.hes")
-		&& FileExist(A_ScriptDir "\Keywords_AHK_L.hes")
-		&& FileExist(A_ScriptDir "\Keywords_AHK_I.hes")
-		&& FileExist(A_ScriptDir "\Keywords_AHK_2.hes"))
+		&& FileExist(A_ScriptDir "\Settings.xml"))
 }
 ; **********************************************************************************************************************************************************************
 SVS_GetLVHeader(sSubTree) {
