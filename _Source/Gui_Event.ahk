@@ -1,73 +1,36 @@
 OnTreeAction:
 
 if (A_GuiEvent = "RightClick") {
+	
 	On_TVContext(A_EventInfo)
-	}
 
-else if (A_GuiEvent = "S") {
+} else if (A_GuiEvent = "S") {
 
-	_id := A_EventInfo
+	id := A_EventInfo
 	if (Resources[Resources.ActiveID].type = "project")
 		Resources[Resources.ActiveID].Save2Obj()
+		
+	Loop 7
+		WinHide % "ahk_id " Gui["Panel" A_Index + 1]
+		
+	if (Resources[id].context = "resource")
+		Resources[id].OpenResource()
+	else
+		Resources[_id].OpenProject()
+	Resources.ActiveID	:=	id	
 	
-	if (Resources[_id].type = "project") {
+	panel :=  Resources[id].type = "project" ? Gui.Panel5 
+			: (Resources[id].type = "file" || Resources[id].type = "library") && Resources[id].context = "resource" ?	Gui.Panel4
+			: (Resources[id].type = "file" || Resources[id].type = "library") && Resources[id].context = "project"	?	Gui.Panel7
+			: Resources[id].type = "resource_parent" ? Gui.Panel8
+			: Resources[id].type = "task_parent" ? Gui.Panel2 : 0
+	WinShow ahk_id %panel%
 	
-		Loop 7
-			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
-
-		Resources[_id].Open() ;																																			[panel 5]
-		WinShow % "ahk_id " Gui.Panel5
-		Resources.ActiveID := _id
-		
-	} else if ((Resources[_id].type = "file"	||	Resources[_id].type = "library")	&&	Resources[_id].context = "resource") {
-		
-		Loop 7
-			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
-
-		Resources[_id].OpenResource() 	; zeigt panel mit info zu datei an (userdata, projects, default properties)	Möglichkeit: switch-to editing							[panel 4]
-		WinShow % "ahk_id " Gui.Panel4
-		Resources.ActiveID := _id
-		
-	} else if ((Resources[_id].type = "file"	||	Resources[_id].type = "library")	&&	Resources[_id].context = "project") { ; ähnlich zu file/resource, aber:			[panel 7]
-																								; + inkl. projects
-																								; + inkl. private user data
-																								; + inkl. button: switch to file/resource
-																								; - ohne editing-Möglichkeit
-		Loop 7
-			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
-
-		Resources[_id].OpenProject(_id)
-		WinShow % "ahk_id " Gui.Panel7
-		Resources.ActiveID := _id
-		
-	} else if (Resources[_id].type = "resource_parent") {	;																							[panel 8]
-	
-		Loop 7
-			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
-
-		WinShow % "ahk_id " Gui.Panel8
-		Resources.ActiveID := _id
-		
-	} else if (Resources[_id].type = "task_parent"){ ; all tasks																						[panel 2]
-	
-		Loop 7
-			WinHide % "ahk_id " Gui["Panel" A_Index + 1]
-
-		WinShow % "ahk_id " Gui.Panel2
-		Resources.ActiveID := _id
-		
-		}
-	;													Treeview																									[panel 1]
-	;													project > tasks																								[panel 6]
-	;													editing																										[panel 3]
 	}
 return
 ; **********************************************************************************************************************************************************************
 MainWinClose:
 OnExit
-
-if A_IsCompiled
-	DllCall("AnimateWindow", "UInt", Gui.WindowHandle, "Int", 500, "UInt", 0x00010000|0x00080000)
 	
 if (Resources[Resources.ActiveID].type = "project")
 	Resources[Resources.ActiveID].Save2Obj()
@@ -82,6 +45,7 @@ For id, resource in Resources
 	
 Gui 1: Destroy
 SCI_Finish(hSCIModule)
+
 ExitApp
 return
 ; **********************************************************************************************************************************************************************
