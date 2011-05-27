@@ -61,7 +61,7 @@ class XMLParser
 				curr_path .= "/" A_LoopField
 				}
 
-		return this.doc.selectNodes(xpath).item(index-1).text := value
+		return this.doc.selectNodes(xpath).item(index-1).text := XML_Encode(value)
 		}
 	}
 
