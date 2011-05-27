@@ -74,6 +74,9 @@ class cProject
 
 	this.Priority		:=	sDoc.Get(sTree . "/properties/priority")
 	this.Name			:=	sDoc.Node(sTree).attributes.getNamedItem("name").nodeValue
+	if Resources.List.HasKey(this.Name)
+		return
+	
 	this.ID				:=	TV_Add(this.Name, sPID, "icon3 expand") ; icon: project
 	this.Type			:=	"project"
 	this.context		:=	sPID ? "project" : "resource"
@@ -367,7 +370,7 @@ Project_Create() {
 	if (ErrorLevel || !_Project)
 		return 0
 
-	if (Resources.List.HasKey(_Project) && Resources[Resources.List[_Project]].type = "project"){
+	if (Resources.List.HasKey(_Project)){
 		Error(A_ThisFunc "()", "-0x0003", "duplicate resource name (invalid user input)", XML_Translation("/UserInterface/Dialogs/CreateProject", 2), "The operation will be aborted.")
 		return
 		}

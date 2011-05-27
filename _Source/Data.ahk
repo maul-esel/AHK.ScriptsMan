@@ -48,6 +48,9 @@ LoopFiles %A_ScriptDir%\#Data\*.xml
 		Gui 1: Listview, Resource_LV
 				
 		_obj.Name		:=	doc.Get("/resource/@name")
+		if Resources.List.HasKey(_obj.Name)
+			continue
+		
 		_obj.ID			:=	TV_Add(_obj.Name, _ID, _ResType = "file" ? "icon4" : "icon5") ; icon: resource-file | resource-lib
 		_obj.Type		:=	_ResType = "file" ? "file" : "library"
 		_obj.context	:=	"resource"
