@@ -129,7 +129,6 @@
 			<CreateUserData>Wollen Sie verhindern, dass diese Daten als Standard-Eigenschaften erkannt werden?</CreateUserData>
 			<CreateUserData>Wollen Sie diese Daten als Standard-Daten festlegen?</CreateUserData>
 			<CreateTask>Geben Sie den Name für die neue Aufgabe ein.</CreateTask>
-			<Browse7zip>Geben Sie den Pfad zu 7zip.exe an. Wenn Sie keine solche besitzen, können Sie sie kostenlos erhalten unter http://www.7-zip.org/.</Browse7zip>
 			<BrowseAHK_B_EXE>Geben Sie den Pfad zu AutoHotkey.exe an (AHK Basic!)</BrowseAHK_B_EXE>
 			<BrowseAHK_L_EXE>Geben Sie den Pfad zu AutoHotkey(_L).exe an.</BrowseAHK_L_EXE>
 			<BrowseAHK_I_EXE>Geben Sie den Pfad zu IronAHK.exe an.</BrowseAHK_I_EXE>

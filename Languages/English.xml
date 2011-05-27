@@ -129,8 +129,6 @@
 			<CreateUserData>Do you want to disallow reading this data as keyword data?</CreateUserData>
 			<CreateUserData>Do you want to set this metadata as default data?</CreateUserData>
 			<CreateTask>Enter the new task's name.</CreateTask>
-			<Browse7zip>Enter the path to 7zip.exe.
-						You don't have 7zip? get it for free at www.7-zip.org.</Browse7zip>
 			<BrowseAHK_B_EXE>Enter the path to your AutoHotkey.exe (AHK basic!)</BrowseAHK_B_EXE>
 			<BrowseAHK_L_EXE>Enter the path to your AutoHotkey(_L).exe.</BrowseAHK_L_EXE>
 			<BrowseAHK_I_EXE>Enter the path to your IronAHK.exe.</BrowseAHK_I_EXE>

@@ -1,7 +1,6 @@
 ﻿<settings>
 	<paths>
 		<script-dir>C:\AutoHotkey</script-dir>
-		<_7zip>C:\Program Files\7-Zip\7z.exe</_7zip>
 		<ahk>
 			<basic>C:\Program Files\AutoHotkey\AutoHotkey.exe</basic>
 			<lexikos>C:\Program Files\AutoHotkey_L\AutoHotkey_L.exe</lexikos>
