@@ -130,6 +130,47 @@ Weitere Informationen sind in der Dokumentation enthalten.
 return
 }
 
+Restart:
+Reload
+return
+; **********************************************************************************************************************************************************************
+ClickList:
+;if (A_GuiEvent = "RightClick" && A_GuiControl != "ResourceData_LV" && A_GuiControl != "Resource_Projects_LV")
+;	Menu, Context_%A_GuiControl%, Show
+if IsFunc(A_GuiControl)
+	%A_GuiControl%(A_GuiEvent, A_EventInfo)
+return
+; **********************************************************************************************************************************************************************
+SelectLanguage:
+return
+; **********************************************************************************************************************************************************************
+OpenHelp:
+If FileExist(A_ScriptDir . "\AHK.ScriptsMan.chm")
+	run AHK.ScriptsMan.chm
+return
+; **********************************************************************************************************************************************************************
+BrowseAHK_B_EXE:
+SVS_BrowseAHK_Exe("B")
+return
+; **********************************************************************************************************************************************************************
+BrowseAHK_L_EXE:
+SVS_BrowseAHK_Exe("L")
+return
+; **********************************************************************************************************************************************************************
+BrowseAHK_I_EXE:
+SVS_BrowseAHK_Exe("I")
+return
+; **********************************************************************************************************************************************************************
+BrowseScriptDir:
+FileSelectFolder ScriptDir, *%A_ProgramFiles%, 3, % XML_Translation("/UserInterface/Dialogs/BrowseScriptDir")
+if not ScriptDir
+	return
+GuiControl 1:, PathScripts, %ScriptDir%
+SVS_SetSetting("paths/ScriptDir", ScriptDir)
+return
+; **********************************************************************************************************************************************************************
+RememberTasks:
+return
 
 WM_Notify(wparam, lparam, msg, hwnd){
 
