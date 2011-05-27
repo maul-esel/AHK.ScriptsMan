@@ -132,32 +132,35 @@ return
 
 
 WM_Notify(wparam, lparam, msg, hwnd){
-global Data_Manager
 
-sender := NumGet(lparam + 0, 0, "UInt")
+sender := NumGet(lparam + 0)
 Loop 3
-	if (sender = Data_Manager["SCI" A_Index ].Handle)
+	if (sender = Gui["SCI" A_Index ])
 		return SCI_onNotify(wparam, lparam, msg, hwnd)
 Loop 8
-	if (sender = Data_Manager["Toolbar" A_Index ].Handle)
+	if (sender = Gui["Toolbar" A_Index ])
 		return Toolbar_onNotify(wparam, lparam, msg, hwnd)
+Loop 8
+	if (sender = Gui["Panel" A_Index])
+		return Panel_wndProc(hwnd, msg, wparam, lparam)
+
 return
 }
 
 SCI_onNotify(wparam, lparam, msg, hwnd){
-global Data_Manager
 static SCN_STYLENEEDED := 2000, SCN_CHARADDED := 2001, SCN_SAVEPOINTREACHED := 2002, SCN_SAVEPOINTLEFT := 2003, SCN_MODIFYATTEMPTRO := 2004, SCN_KEY := 2005
 , SCN_DOUBLECLICK := 2006, SCN_UPDATEUI := 2007, SCN_MODIFIED := 2008, SCN_MACRORECORD := 2009, SCN_MARGINCLICK := 2010, SCN_NEEDSHOWN := 2011, SCN_PAINTED := 2013
 , SCN_USERLISTSELECTION := 2014, SCN_URIDROPPED := 2015, SCN_DWELLSTART := 2016, SCN_DWELLEND := 2017, SCN_ZOOM := 2018, SCN_HOTSPOTCLICK := 2019
 , SCN_HOTSPOTDOUBLECLICK := 2020, SCN_CALLTIPCLICK := 2021, SCN_AUTOCSELECTION := 2022, SCN_INDICATORCLICK := 2023, SCN_INDICATORRELEASE := 2024
 , SCN_AUTOCCANCELLED := 2025, SCN_AUTOCCHARDELETED := 2026, SCN_HOTSPOTRELEASECLICK := 2027
-
-if (NumGet(lparam + 0, 0, "UInt") != Data_Manager.SCI1.Handle)
+	
+sender	:= NumGet(lparam + 0, 0, "UInt")
+if (sender != Gui.SCI1)
 	return
 	
-sender := NumGet(lparam + 0, 0, "UInt")
-code := NumGet(lparam + 0, 8, "UInt")
-_lang := Data_Manager.Documents[Data_Manager.Documents.Active].SyntaxLanguage := "Ini"
+code	:= NumGet(lparam + 0, 8, "UInt")
+_lang	:= Documents[Documents.Active].SyntaxLanguage := "Ini"
+
 if (code = SCN_STYLENEEDED) {
 	If IsFunc(fn := _lang "_ScnStyleNeeded")
 		return %fn%(sender, lparam)
@@ -165,7 +168,7 @@ if (code = SCN_STYLENEEDED) {
 	If IsFunc(fn := _lang "_ScnCharAdded")
 		return %fn%(sender, lparam)
 } else if (code = SCN_SAVEPOINTREACHED) {
-	Toolbar_SetButton(Data_Manager.Toolbar3.Handle, "." _ID, "disabled") ; TODO: define button id and enter
+	Toolbar_SetButton(Gui.Toolbar3, "." _ID, "disabled") ; TODO: define button id and enter
 	if IsFunc(fn := _lang "_ScnSavePointReached")
 		return %fn%(sender)
 	}
