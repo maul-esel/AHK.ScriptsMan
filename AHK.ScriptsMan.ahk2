@@ -72,8 +72,83 @@ Gui 1: Show, Maximize, % "AHK.ScriptsMan - " (A_IsCompiled ? "(executable)" : "(
 OnMessage(0x4E, "WM_Notify")
 return
 ; **********************************************************************************************************************************************************************
-Resource_Package(ID){
+Resource_Package(id){
 
+time := A_Now
+file := Resources[id].file
+type	:=	Resources[id].type
+name	:=	Resources[id].Name
+
+SplitPath file, _file_name
+FileMove %file%, %A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_main_1.1.1, 1
+FileAppend 1.1.1: added data file for %type% resource [%name%]: %_file_name%.package_main_1.1.1, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+
+if (Resource[id] = "project") {
+	_list	:=	Resources[id].XML.GetNodes(Resources[id].Tree "/files/file")
+	Loop _list.length {
+		_name	:=	_list.item(A_Index - 1).attributes.getNamedItem("name").nodeValue
+		rid		:=	Resources.List[_name]
+		
+		_data_file	:=	Resources[rid].file
+		if !(Resources[id].HasKey("path"){
+			_Value	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").text
+			_Flag	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").attributes.getNamedItem("flag").nodeValue
+			if (_Value && !InStr(_Flag, "#"))
+				Resources[rid].path	:=	_Value
+			}
+		
+		SplitPath _data_file, _file_name
+		FileMove	%_data_file%,	%A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_index_1.%A_Index%.1, 1
+		FileAppend	1.%A_Index%.1: added data file for file resource [%_name%]: %_file_name%.package_index_1.%A_Index%.1, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		
+		if FileExist(path := AbsolutePath(Resources[rid].path)){
+			SplitPath path, _file_name
+			FileMove %path%, %A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_index_1.%A_Index%.2, 1
+			FileAppend 1.%A_Index%.2: added file for file resource [%_name%]: %_file_name%.package_index_1.%A_Index%.2, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		} else
+			FileAppend 1.%A_Index%.2: error: file for file resource [%_name%]: not found (path = '%path%'), %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		}
+	
+	_list	:=	Resources[id].XML.GetNodes(Resources[id].Tree "/libraries/lib")
+	Loop _list.length {
+		_name	:=	_list.item(A_Index - 1).attributes.getNamedItem("name").nodeValue
+		rid		:=	Resources.List[_name]
+		_data_file	:=	Resources[rid].file
+		
+		if !(Resources[id].HasKey("path"){
+			_Value	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").text
+			_Flag	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").attributes.getNamedItem("flag").nodeValue
+			if (_Value && !InStr(_Flag, "#"))
+				Resources[rid].path	:=	_Value
+			}
+		
+		SplitPath _data_file, _file_name
+		FileMove	%_data_file%,	%A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_index_2.%A_Index%.1, 1
+		FileAppend	2.%A_Index%.1: added data file for library resource [%_name%]: %_file_name%.package_index_2.%A_Index%.1, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		
+		if FileExist(path := AbsolutePath(Resources[rid].path)){
+			SplitPath path, _file_name
+			FileMove %path%, %A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_index_2.%A_Index%.2, 1
+			FileAppend 2.%A_Index%.2: added file for library resource [%name%]: %_file_name%.package_index_2.%A_Index%.2, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		} else
+			FileAppend 2.%A_Index%.2: error: file for library resource [%_name%]: not found (path = '%path%'), %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		}
+} else {
+	if !(Resources[id].HasKey("path")){
+		_Value	:=	Resources[id].Node(Resources[id].Tree "/metadata/metadata[@name='path']").text
+		_Flag	:=	Resources[id].Node(Resources[id].Tree "/metadata/metadata[@name='path']").attributes.getNamedItem("flag").nodeValue
+		if (_Value && !InStr(_Flag, "#"))
+			Resources[id].path	:=	_Value
+		}
+		
+	if FileExist(path := AbsolutePath(Resources[id].path)){
+		SplitPath path, _file_name
+		FileMove %path%, %A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_main_1.1.2, 1
+		FileAppend 1.1.2: added file for %type% resource [%name%]: %_file_name%.package_main_1.1.2, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+	} else
+		FileAppend 1.1.2: error: file for %type% resource [%name%]: not found (path = '%path%'), %A_ScriptDir%\#Temp\%time%_package\package.logfile
+	}
+	
 RegisterCom(true)
 Zip := ComObjCreate("XStandard.Zip")
 
