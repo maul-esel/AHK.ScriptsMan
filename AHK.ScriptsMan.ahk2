@@ -90,7 +90,7 @@ if (Resource[id] = "project") {
 		rid		:=	Resources.List[_name]
 		
 		_data_file	:=	Resources[rid].file
-		if !(Resources[id].HasKey("path"){
+		if !(Resources[id].HasKey("path")){
 			_Value	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").text
 			_Flag	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").attributes.getNamedItem("flag").nodeValue
 			if (_Value && !InStr(_Flag, "#"))
@@ -115,7 +115,7 @@ if (Resource[id] = "project") {
 		rid		:=	Resources.List[_name]
 		_data_file	:=	Resources[rid].file
 		
-		if !(Resources[id].HasKey("path"){
+		if !(Resources[id].HasKey("path")){
 			_Value	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").text
 			_Flag	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").attributes.getNamedItem("flag").nodeValue
 			if (_Value && !InStr(_Flag, "#"))
@@ -152,10 +152,10 @@ if (Resource[id] = "project") {
 RegisterCom(true)
 Zip := ComObjCreate("XStandard.Zip")
 
-LoopFiles %A_ScriptDir%\#Temp\%time%_package\*, 0, 1
+LoopFiles %A_ScriptDir%\#Temp\%time%_package\*
 	{
 	RegExMatch(A_LoopFileDir, "imU)^\Q" A_ScriptDir "\#Temp\" time "_package\E\\(.*)$", path)
-	Zip.Pack(A_LoopFileFullPath, A_ScriptDir "\#Temp\" time "_package.zip", true, path1, 9)
+	Zip.Pack(A_LoopFileFullPath, A_ScriptDir "\#Temp\" time "_package.zip", false, "", 9)
 	}
 	
 ObjRelease(Zip)
