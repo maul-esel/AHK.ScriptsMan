@@ -15,6 +15,12 @@ External work used in this project:
 	- #Extern\FileIsBinary.ahk by Lexikos
 		- http://www.autohotkey.com/forum/topic52681.html
 		
+	- #Extern\Scintilla.ahk by HotKeyIt
+		- http://www.autohotkey.com/forum/viewtopic.php?p=447527#447525
+		
+	- #Extern\Struct.ahk by HotKeyIt
+		- http://www.autohotkey.com/forum/viewtopic.php?t=59581
+		
 	- _Source\debug.ahk >> A_LastError() by Bentschi
 		- http://de.autohotkey.com/forum/viewtopic.php?t=8010
 		

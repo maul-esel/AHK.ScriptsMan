@@ -1,5 +1,13 @@
 class cProject
 	{
+	OpenResource(){
+	return this.Open()	
+	}
+	; **********************************************************************************************************************************************************************
+	OpenProject(){
+	return this.Open()
+	}
+	; **********************************************************************************************************************************************************************
 	Save2Obj() {
 
 	this.Notes := SCI_GetText(Gui.SCI2)
@@ -360,6 +368,77 @@ class cProject
 		}
 	
 	return
+	}
+	; **********************************************************************************************************************************************************************
+	Package(){
+	time	:=	A_Now
+	file	:=	this.file
+	type	:=	this.type
+	name	:=	this.Name
+	
+	_list	:=	this.XML.GetNodes(this.Tree "/files/file")
+	Loop _list.length {
+		_name	:=	_list.item(A_Index - 1).attributes.getNamedItem("name").nodeValue
+		rid		:=	Resources.List[_name]
+		
+		_data_file	:=	Resources[rid].file
+		SplitPath	_data_file, _file_name
+		FileCopy	%_data_file%,	%A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_index_1.%A_Index%.1, 1
+		FileAppend	1.%A_Index%.1: added data file for file resource [%_name%]: %_file_name%.package_index_1.%A_Index%.1, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		
+		if !(Resources[rid].HasKey("path")){
+			_Value	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").text
+			_Flag	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").attributes.getNamedItem("flag").nodeValue
+			if (_Value && !InStr(_Flag, "#"))
+				Resources[rid].path	:=	_Value
+			}
+		if FileExist(path := AbsolutePath(Resources[rid].path)){
+			SplitPath path, _file_name
+			FileCopy %path%, %A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_index_1.%A_Index%.2, 1
+			FileAppend 1.%A_Index%.2: added file for file resource [%_name%]: %_file_name%.package_index_1.%A_Index%.2, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		} else
+			FileAppend 1.%A_Index%.2: error: file for file resource [%_name%]: not found (path = '%path%'), %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		}
+	
+	_list	:=	this.XML.GetNodes(this.Tree "/libraries/lib")
+	Loop _list.length {
+		_name	:=	_list.item(A_Index - 1).attributes.getNamedItem("name").nodeValue
+		rid		:=	Resources.List[_name]
+		
+		_data_file	:=	Resources[rid].file
+		SplitPath	_data_file, _file_name
+		FileCopy	%_data_file%,	%A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_index_2.%A_Index%.1, 1
+		FileAppend	2.%A_Index%.1: added data file for library resource [%_name%]: %_file_name%.package_index_2.%A_Index%.1, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		
+		if !(Resources[rid].HasKey("path")){
+			_Value	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").text
+			_Flag	:=	Resources[rid].XML.Node(Resources[rid].Tree "/metadata/metadata[@name='path']").attributes.getNamedItem("flag").nodeValue
+			if (_Value && !InStr(_Flag, "#"))
+				Resources[rid].path	:=	_Value
+			}	
+		if FileExist(path := AbsolutePath(Resources[rid].path)){
+			SplitPath path, _file_name
+			FileCopy %path%, %A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_index_2.%A_Index%.2, 1
+			FileAppend 2.%A_Index%.2: added file for library resource [%name%]: %_file_name%.package_index_2.%A_Index%.2, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		} else
+			FileAppend 2.%A_Index%.2: error: file for library resource [%_name%]: not found (path = '%path%'), %A_ScriptDir%\#Temp\%time%_package\package.logfile
+		}
+		
+	if FileExist(path := AbsolutePath(this.path)){
+		SplitPath	path, _file_name
+		FileCopy	%path%, %A_ScriptDir%\#Temp\%time%_package\%_file_name%.package_main_1.1.2, 1
+		FileAppend	1.1.2: added file for %type% resource [%name%]: %_file_name%.package_main_1.1.2, %A_ScriptDir%\#Temp\%time%_package\package.logfile
+	} else
+		FileAppend	1.1.2: error: file for %type% resource [%name%]: not found (path = '%path%'), %A_ScriptDir%\#Temp\%time%_package\package.logfile
+	
+	RegisterCom(true)
+	Zip := ComObjCreate("XStandard.Zip")
+
+	LoopFiles %A_ScriptDir%\#Temp\%time%_package\*
+		Zip.Pack(A_LoopFileFullPath, A_ScriptDir "\#Temp\" time "_package.zip", false, "", 9)
+	
+	ObjRelease(Zip)
+	RegisterCom(false)
 	}
 }
 

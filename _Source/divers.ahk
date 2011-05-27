@@ -22,7 +22,7 @@ FilesAreMissing() {
 return !(FileExist(A_ScriptDir "\AHK.ScriptsMan.dll") 
 		&& FileExist(A_ScriptDir "\Settings.xml")
 		&& FileExist(A_ScriptDir "\#Extern\XZip.dll")
-		&& FileExist(A_ScriptDir "\#Extern\Scintilla.dll"))
+		&& FileExist(A_ScriptDir "\#Extern\SciLexer.dll"))
 }
 ; **********************************************************************************************************************************************************************
 SVS_GetLVHeader(sSubTree) {

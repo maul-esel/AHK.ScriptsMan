@@ -54,9 +54,6 @@ Gui.SCI3			:=	SCI_Add(Gui.Panel6,	0,	100,	600,	430)
 Documents.Active			:=	SCI_GetDocPointer(Gui.SCI1)
 Documents[Documents.Active]	:=	{}
 Tab_SetLParam(Gui.Tab, 1, Documents.Active)
-SCI_SetKeysUnicode(Gui.SCI1, true)
-SCI_SetLexer(Gui.SCI1, 0)
-SCI_Colourise(Gui.SCI1, 0, -1)
 ;MsgBox % SCI_GetLexer(Gui.SCI1)
 /*_Temp=
 	(LTrim
@@ -97,7 +94,7 @@ Gui	Add,	Listview,	x0		y50	w1200	h950	%ListOptions% hwndC_01 vCommonTasks_LV,			
 DllCall("SetParent", "UInt", C_01, "UInt", Gui.Panel2)
 ; ******************************************************************************************************************************************************************************************
 ; controls on Panel4
-Gui 1: Add, Text,		x0 		y100	w1200	h100	0x1000		 	hwndC_01 vResourceInfo
+Gui 1: Add, Text,		x0 		y50		w1200	h150	0x1000		 	hwndC_01 vResourceInfo
 Gui 1: Add,	ListView,	x0		y225	w1200	h175	%ListOptions%	hwndC_02 vResourceUserData_LV,	% SVS_GetLVHeader("Resources/UserData")
 Gui 1: Add,	ListView,	x0		y425	w1200	h175	%ListOptions%	hwndC_03 vResourceProjects_LV,	% SVS_GetLVHeader("Resources/Projects")
 Loop 3 {

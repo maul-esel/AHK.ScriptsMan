@@ -42,7 +42,7 @@ class XMLParser
 	
 	Save(location){
 		FileDelete %location%
-		FileAppend % this.doc.xml, %location%
+		FileAppend % this.doc.documentElement.xml, %location%
 		return ErrorLevel
 		}
 		
