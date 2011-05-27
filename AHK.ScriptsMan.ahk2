@@ -1,5 +1,5 @@
 /**********************************************************************************************************************************************************************
-Name:													AHK.ScriptsMan beta 1
+Name:													AHK.ScriptsMan alpha 1
 AutoHotkey version:										AHK v2
 Language:												custom
 Author:													maul.esel
@@ -71,7 +71,9 @@ Data_List()
 Gui 1: Show, Maximize, % "AHK.ScriptsMan - " (A_IsCompiled ? "(executable)" : "(script)")
 OnMessage(0x4E, "WM_Notify")
 return
+; ******************************************************* END OF AUTOEXECUTE SECTION ***********************************************************************************
 ; **********************************************************************************************************************************************************************
+/*
 UI_Event_Handler(sHwnd, sEvent, sText, sPos, sID) {
 tooltip %sID%
 If (sEvent != "click")
@@ -116,18 +118,18 @@ if (sID = 211) {
 	;	HE_OpenFile(HwndHEdit2, _File, true)
 } else if (sID = 241) {
 	;_Text := HE_GetSelText(HwndHEdit2)
-	_Text := SCI_GetSelection(Data_Manager.SCI2.Handle)
+	_Text := SCI_GetSelection(Gui.SCI1)
 	;Dlg_Find(HwndHEdit2, "Dlg_Find_Event", "-d", _Text)
 } else if (sID = 242) {
-	_Text := SCI_GetSelection(Data_Manager.SCI2.Handle)
+	_Text := SCI_GetSelection(Gui.SCI1)
 	;Dlg_Replace(HwndHEdit2, "Dlg_Replace_Event", "-d-c-w", _Text)
 	return -1
 } else if (sID = 243) {
 	Menu Context_Language, Show
 } else if (sID = 246) {
-	return SCI_Undo(Data_Manager.SCI2.Handle)
+	return SCI_Undo(Gui.SCI1)
 } else if (sID = 247) {
-	return SCI_Redo(Data_Manager.SCI2.Handle)
+	return SCI_Redo(Gui.SCI1)
 } else if (sID = 251) {
 	Library_Create()
 	return -1
@@ -227,13 +229,11 @@ if (Event = "F") {
 	}
 return
 }
+*/
 ; **********************************************************************************************************************************************************************
 ; **********************************************************************************************************************************************************************
 Restart:
-If (!B_ExitCode) {
-	B_ExitCode := 2
-	Gosub MainWinClose
-	}
+Reload
 return
 ; **********************************************************************************************************************************************************************
 ClickList:
@@ -249,17 +249,6 @@ return
 OpenHelp:
 If FileExist(A_ScriptDir . "\AHK.ScriptsMan.chm")
 	run AHK.ScriptsMan.chm
-return
-; **********************************************************************************************************************************************************************
-Browse7zip:
-FileSelectFile Path7zip, 3, %A_ProgramFiles%, % XML_Translation("/UserInterface/Dialogs/Browse7zip"), (*.exe)
-if not Path7zip
-	return
-SplitPath Path7zip, , , Ext
-if (Ext != "EXE")
-	return
-GuiControl 1: , Path7zip, %Path7zip%
-SVS_SetSetting("/path/7zip", Path7zip)
 return
 ; **********************************************************************************************************************************************************************
 BrowseAHK_B_EXE:
@@ -296,10 +285,12 @@ return
 
 #Include %A_ScriptDir%\_Source
 	#Include Data.ahk
+	
 	#Include Resource.ahk
 	#Include Project.ahk
 	#Include File.ahk
 	#Include Library.ahk
+	
 	#Include Task.ahk
 	#Include divers.ahk
 	#Include Debug.ahk
