@@ -23,4 +23,7 @@ External work used in this project:
 	
 	- #Extern\XZip.dll
 		- http://www.xstandard.com/
+		
+Notes:
+	- any features relying on the zip component won't work on 64bit systems.
 	
