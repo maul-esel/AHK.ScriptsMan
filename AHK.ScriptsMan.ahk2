@@ -16,9 +16,11 @@ global null := false
 if FilesAreMissing(){
 	Menu, Tray, NoIcon
 	Error("the auto-execute section", "-0x0000", "Files are missing.", "Required files include:`n- `"" A_ScriptDir "\AHK.ScriptsMan.dll`"`n"
-		. "- `"" A_ScriptDir "\Settings.xml`"`n- `"" A_ScriptDir "\Keywords_AHK_B.hes`"`n", "Exiting...")
+		. "- `"" A_ScriptDir "\Settings.xml`"`n- `"" A_ScriptDir "\#Extern\Scintilla.dll`"`n- `"" A_ScriptDir "\#Extern\XZip.dll`"", "Exiting...")
 	ExitApp
 	}
+RegisterCom(true)
+	
 Menu Tray, Icon, %A_ScriptDir%\AHK.ScriptsMan.dll, 1, 1
 hSCIModule := SCI_Init(A_ScriptDir "\#Extern\Scintilla.dll")
 ; ***********************************************************************************************************************************************************************

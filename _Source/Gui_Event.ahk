@@ -64,6 +64,7 @@ else if (A_GuiEvent = "S") {
 return
 ; **********************************************************************************************************************************************************************
 MainWinClose:
+
 if A_IsCompiled
 	DllCall("AnimateWindow", "UInt", Gui.WindowHandle, "Int", 500, "UInt", 0x00010000|0x00080000)
 	
@@ -72,13 +73,15 @@ if (Resources[Resources.ActiveID].type = "project")
 
 For id, resource in Resources
 	{
-	if (resource.type = "project" && resource.context = "resource")
-		resource.Save2File()	
+	if (resource.type = "project")
+		resource.Save2File(false)
+		
+	Resources.Remove(id, "")
 	}
 	
-SVS_SaveSettings()
 Gui 1: Destroy
 SCI_Finish(hSCIModule)
+RegisterCom(false)
 ExitApp
 return
 ; **********************************************************************************************************************************************************************

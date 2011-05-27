@@ -107,3 +107,11 @@ if (type = "object" && IsObject(val))
 	return true
 return false
 }
+
+RegisterCOM(flag){
+if flag
+	runwait *RunAs regsvr32.exe /s "%A_ScriptDir%\#Extern\XZip.dll"
+else
+	runwait *RunAs regsvr32.exe /s /u "%A_ScriptDir%\#Extern\XZip.dll"
+return ErrorLevel
+}
