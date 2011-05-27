@@ -64,6 +64,7 @@ else if (A_GuiEvent = "S") {
 return
 ; **********************************************************************************************************************************************************************
 MainWinClose:
+OnExit
 
 if A_IsCompiled
 	DllCall("AnimateWindow", "UInt", Gui.WindowHandle, "Int", 500, "UInt", 0x00010000|0x00080000)
