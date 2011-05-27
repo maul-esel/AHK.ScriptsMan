@@ -482,7 +482,6 @@ Project_Create() {
 			. "`t<tasks>`r`n"
 			. "`t</tasks>`r`n"
 			. "</resource>"
-		FileAppend %xml%, %_Path%
 		xml := new XMLParser(xml, true)
 	} else {
 		_Path	:=	Resources[_Parent].File
@@ -505,11 +504,17 @@ Project_Create() {
 		xml := new XMLParser(xml, true)
 		Resources[_Parent].XML.doc.documentElement.appendChild(xml)
 		xml := Resources[_Parent].XML
-		xml.Save(Resources[_Parent].File)
 		}
+		
+	xml.Save(_Path)
 
 	_project := new cProject
 	_project.List(xml, _Tree, _Parent, _Path)
-
-	return _project.Open()
+	
+	Loop 7
+		WinHide % "ahk_id " Gui["Panel" A_Index + 1]
+	_project.Open()
+	WinShow % "ahk_id " Gui.Panel5
+	
+	return
 	}
