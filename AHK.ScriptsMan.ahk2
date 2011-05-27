@@ -19,7 +19,6 @@ if FilesAreMissing(){
 		. "- `"" A_ScriptDir "\Settings.xml`"`n- `"" A_ScriptDir "\#Extern\Scintilla.dll`"`n- `"" A_ScriptDir "\#Extern\XZip.dll`"", "Exiting...")
 	ExitApp
 	}
-RegisterCom(true)
 	
 Menu Tray, Icon, %A_ScriptDir%\AHK.ScriptsMan.dll, 1, 1
 hSCIModule := SCI_Init(A_ScriptDir "\#Extern\Scintilla.dll")
@@ -74,6 +73,7 @@ OnMessage(0x4E, "WM_Notify")
 return
 ; **********************************************************************************************************************************************************************
 Resource_Package(ID){
+RegisterCom(true)
 
 if not _7zip := XML_Get("/paths/7zip")
 	return -1
@@ -83,7 +83,7 @@ command := command " && `"%_7zip%`" a -ssw -t7z -r `"..\" SVS_F "`" `".\" Resour
 command := "`"" command "`""
 
 run %A_ComSpec% /k %command%, %A_ScriptDir%\#Temp
-
+RegisterCom(false)
 return
 }
 ; **********************************************************************************************************************************************************************

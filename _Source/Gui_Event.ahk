@@ -82,7 +82,6 @@ For id, resource in Resources
 	
 Gui 1: Destroy
 SCI_Finish(hSCIModule)
-RegisterCom(false)
 ExitApp
 return
 ; **********************************************************************************************************************************************************************
