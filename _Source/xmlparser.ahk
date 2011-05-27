@@ -96,6 +96,6 @@ StrReplace sXML, sXML, &gt;,		>,	1
 StrReplace sXML, sXML, &amp;,		&,	1
 StrReplace sXML, sXML, &quot;,		",	1
 StrReplace sXML, sXML, &apos;,		',	1
-StrReplace sXML, sXML, &#160,		%A_Space%,	1
+StrReplace sXML, sXML, &#160;,		%A_Space%,	1
 return sXML
 }
