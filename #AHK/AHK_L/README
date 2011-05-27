@@ -1,0 +1,10 @@
+This file should contain the latest AHK_L versions as
+	- AutoHotkey_64.exe
+	- AutoHotkey_A.exe
+	- AutoHotkey_U.exe
+It should also contain the compiler files as
+	- Ahk2Exe.exe
+	- AutoHotkey_64.bin
+	- AutoHotkey_A.bin
+	- AutoHotkey_U.bin
+It also contains their license.

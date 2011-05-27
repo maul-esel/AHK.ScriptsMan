@@ -1,0 +1,6 @@
+This directory should contain the AHK basic exe (v 1.0.48.05) as
+	- AutoHotkey.exe
+It should also contain the compiler files as
+	- Ahk2Exe.exe
+	- AutoHotkey.bin
+It also contains their license.

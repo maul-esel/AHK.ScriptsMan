@@ -1,0 +1,5 @@
+This directory should contain the latest IronAHK version files as
+	- IronAHK.exe
+	- IronAHK.Rusty.dll
+	- IronAHK.Scripting.dll
+It also contains their license.
