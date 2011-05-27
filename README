@@ -17,4 +17,10 @@ External work used in this project:
 		
 	- _Source\debug.ahk >> A_LastError() by Bentschi
 		- http://de.autohotkey.com/forum/viewtopic.php?t=8010
+		
+	- #Extern\Scintilla.dll (renamed from SciLexer.dll)
+		- http://scintilla.org/
+	
+	- #Extern\XZip.dll
+		- http://www.xstandard.com/
 	
