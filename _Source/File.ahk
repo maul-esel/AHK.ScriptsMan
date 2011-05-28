@@ -1,5 +1,4 @@
-class cFile extends cResource
-	{
+class cFile extends cResource {
 	OpenProject() {
 	return
 	}

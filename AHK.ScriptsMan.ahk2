@@ -10,6 +10,7 @@ Author:													maul.esel
 ListLines Off
 OnExit MainWinClose
 global XMLParser, cResource, cFile, cLibrary, cProject ; classes
+global _Scintilla, _RemoteBuf
 global Documents, Resources, Gui, Data_Manager, Keyword ; other
 global null := false
 
@@ -21,7 +22,7 @@ if FilesAreMissing(){
 	}
 	
 Menu Tray, Icon, %A_ScriptDir%\AHK.ScriptsMan.dll, 1, 1
-hSCIModule := SCI_Init(A_ScriptDir "\#Extern\SciLexer.dll")
+;hSCIModule := SCI_Init(A_ScriptDir "\#Extern\SciLexer.dll")
 ; ***********************************************************************************************************************************************************************
 Data_Manager := {}
 Data_Manager.ScriptDir := XML_Get("/paths/script-dir")
@@ -80,8 +81,8 @@ return
 	#Include Toolbar.ahk
 	#Include TVM.ahk
 	#Include FileIsBinary.ahk
+	#Include Scintilla.ahk
 	
-#Include <scintilla>
 
 #Include %A_ScriptDir%\_Source
 	#Include Data.ahk

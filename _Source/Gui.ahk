@@ -48,10 +48,10 @@ Loop 8 {
 Gui, Add, Tab2, vSCIEditTab hwndC_01 x0 y100 w1200 h900 altSubmit, %A_Space%
 DllCall("SetParent", "UInt", Gui.Tab := C_01, "UInt", Gui.Panel3)
 ; ******************************************************************************************************************************************************************************************
-Gui.SCI1			:=	SCI_Add(Gui.Tab,	0,	25,		1200,	875)
-Gui.SCI2			:=	SCI_Add(Gui.Panel5,	0,	560,	600,	430)
-Gui.SCI3			:=	SCI_Add(Gui.Panel6,	0,	100,	600,	430)
-Documents.Active			:=	SCI_GetDocPointer(Gui.SCI1)
+Gui.SCI1			:=	new _Scintilla(Gui.Tab,	0,	25,		1200,	875)
+Gui.SCI2			:=	new _Scintilla(Gui.Panel5,	0,	560,	600,	430)
+Gui.SCI3			:=	new _Scintilla(Gui.Panel6,	0,	100,	600,	430)
+Documents.Active			:=	Gui.SCI1.GetDocPointer()
 Documents[Documents.Active]	:=	{}
 Tab_SetLParam(Gui.Tab, 1, Documents.Active)
 ;MsgBox % SCI_GetLexer(Gui.SCI1)
@@ -69,12 +69,12 @@ Tab_SetLParam(Gui.Tab, 1, Documents.Active)
 	)
 */
 Loop 3 {
-	SCI_SetFont(				Gui["SCI" A_Index ], 		A_Index = 2 ? "Calibri" : "Courier New") ;!
-	SCI_LineNumbersBarWidth(	Gui["SCI" A_Index ],		A_Index = 2 ? 0 : 25)
-	SCI_SetIndentationGuides(	Gui["SCI" A_Index ],		2)
-	SCI_SetWrapMode(			Gui["SCI" A_Index ],		1)
-	SCI_SetWrapStartIndent(		Gui["SCI" A_Index ],		5)
-	SCI_SetKeysUnicode(			Gui["SCI" A_Index ],		true)
+	Gui["SCI" A_Index ].SetFont(A_Index = 2 ? "Calibri" : "Courier New") ;!
+	Gui["SCI" A_Index ].LineNumbersBarWidth(A_Index = 2 ? 0 : 25)
+	Gui["SCI" A_Index ].SetIndentationGuides(2)
+	Gui["SCI" A_Index ].SetWrapMode(1)
+	Gui["SCI" A_Index ].SetWrapStartIndent(5)
+	Gui["SCI" A_Index ].SetKeysUnicode(true)
 ;>>> HE_SetColors(Gui["HiEdit" A_Index ].Handle,		_Temp,	1)
 	}
 ;>>> HE_SetKeyWordFile(A_ScriptDir "\#Data\KeywordsAHKB.hes")

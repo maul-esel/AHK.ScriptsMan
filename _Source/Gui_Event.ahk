@@ -44,7 +44,7 @@ For id, resource in Resources
 	}
 	
 Gui 1: Destroy
-SCI_Finish(hSCIModule)
+DllCall("FreeLibrary", "UInt", _Scintilla.hModule)
 
 ExitApp
 return
@@ -182,7 +182,7 @@ Loop 8
 	if (sender = Gui["Toolbar" A_Index ])
 		return Toolbar_onNotify(wparam, lparam, msg, hwnd)
 Loop 8
-	if (sender = Gui["Panel" A_Index])
+	if (sender = Gui["Panel" A_Index ])
 		return Panel_wndProc(hwnd, msg, wparam, lparam)
 
 return

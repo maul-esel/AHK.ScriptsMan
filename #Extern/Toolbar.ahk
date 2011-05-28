@@ -85,7 +85,7 @@ Toolbar_Add(hGui, Handler, Style="", ImageList="", Pos="") {
 
 	if !MODULEID { 
 		old := OnMessage(0x4E, "Toolbar_onNotify"),	MODULEID := 80609
-		if old != Toolbar_onNotify
+		if (old != "Toolbar_onNotify")
 			Toolbar("oldNotify", RegisterCallback(old))
 	}
 
@@ -135,7 +135,7 @@ Toolbar_Add(hGui, Handler, Style="", ImageList="", Pos="") {
 	SendMessage, TB_BUTTONSTRUCTSIZE, 20, 0, , ahk_id %hCtrl%
 	SendMessage, TB_SETEXTENDEDSTYLE, 0, hExStyle, , ahk_id %hCtrl% 
 
-	SendMessage, TB_SETUNICODEFORMAT, A_IsUnicode,,, ahk_id %hCtrl% ; Ansi = 0, Unicode !=0
+	SendMessage, TB_SETUNICODEFORMAT, true,,, ahk_id %hCtrl% ; Ansi = 0, Unicode !=0
 	
 
 	if(ImageList != "")

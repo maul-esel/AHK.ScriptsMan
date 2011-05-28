@@ -10,7 +10,7 @@ class cProject
 	; **********************************************************************************************************************************************************************
 	Save2Obj() {
 
-	this.Notes := SCI_GetText(Gui.SCI2)
+	this.Notes := Gui.SCI2.GetText()
 
 	GuiControlGet _Var, 1:, StatDDL
 	this.Status := _Var
@@ -318,7 +318,7 @@ class cProject
 	GuiControl 1: +Redraw, ProjectLibraries_LV
 	GuiControl 1: +Redraw, ProjectUserData_LV
 
-	SCI_SetText(Gui.SCI2, this.notes)
+	Gui.SCI2.SetText(this.notes)
 
 	return
 	}
