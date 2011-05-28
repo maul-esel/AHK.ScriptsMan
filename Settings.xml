@@ -13,6 +13,15 @@
 	<always_safe>1</always_safe>
 	
 	<source_languages>
+		<lang name="no language"	isbuiltin="1">1</lang>
+		<lang name="python"			isbuiltin="1">2</lang>
+		<lang name="CPP"			isbuiltin="1">3</lang>
+		<lang name="HTML"			isbuiltin="1">4</lang>
+		<lang name="XML"			isbuiltin="1">5</lang>
+		<lang name="PERL"			isbuiltin="1">6</lang>
+		<lang name="SQL"			isbuiltin="1">7</lang>
+		<lang name="VB"				isbuiltin="1">8</lang>
+		<lang name="Properties"		isbuiltin="1">9</lang>
 	</source_languages>
 	
 	<tasks>
