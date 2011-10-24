@@ -1,3 +1,7 @@
+# Note:
+***This project is no longer maintained. It was ported to C# and is now konown (and maintained) as [ChameleonCoder](https://github.com/maul-esel/ChameleonCoder).***
+
+```
 This program is intended to help AHK coders to manage their projects and related stuff.
 
 It is written in new AutoHotkey v2 version, which is still alpha.
@@ -29,4 +33,4 @@ External work used in this project:
 		
 Notes:
 	- any features relying on the zip component won't work on 64bit systems.
-	
+```
