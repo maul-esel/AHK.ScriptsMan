@@ -1,5 +1,5 @@
 # Note:
-***This project is no longer maintained. It was ported to C# and is now konown (and maintained) as [ChameleonCoder](https://github.com/maul-esel/ChameleonCoder).***
+***This project is no longer maintained. It was ported to C# and is now known (and maintained) as [ChameleonCoder](https://github.com/maul-esel/ChameleonCoder).***
 
 ```
 This program is intended to help AHK coders to manage their projects and related stuff.
